@@ -15,20 +15,11 @@ execute:
 ```python
 # imports here
 
-
-
-
 ```
 
 # Summary
 
  (Insert summary after analysis and discussion complete) 
-
-
-
-
-
-
 
 
 
@@ -56,105 +47,7 @@ Each row includes 22 categorical variables that are physical characteristics of 
 
 ## Analysis
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Results & Discussion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # References 
 
