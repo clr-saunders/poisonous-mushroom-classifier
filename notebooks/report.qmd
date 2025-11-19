@@ -14,13 +14,18 @@ execute:
 
 # Document starts here
 
+```{python}
+import requests
+import zipfile
+# First step is adding the downloaded data to the data directory by code
 
 # download data as zip and extract
 url = "https://archive.ics.uci.edu/static/public/73/mushroom.zip"
 
-request = requests.get(url)
+response = requests.get(url)
 with open("../data/raw/mushroom.zip", 'wb') as f:
-    f.write(request.content)
+    f.write(response.content)
 
 with zipfile.ZipFile("../data/raw/mushroom.zip", 'r') as zip_ref:
     zip_ref.extractall("../data/raw")
+```
