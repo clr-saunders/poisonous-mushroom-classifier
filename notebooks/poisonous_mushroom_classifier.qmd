@@ -2,7 +2,7 @@
 title: "Mushroom Classification"
 author: "Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders"
 date: "November 18, 2025"
-jupyter: poisonous_mushroom_classifier
+# jupyter: poisonous_mushroom_classifier
 format:
   pdf: default
 execute:
@@ -152,7 +152,6 @@ col_names
 
 ```{python}
 # Key mushroom feature summary
-
 summary_rows = []
 for col in col_names:
     vc = df[col].value_counts()
@@ -174,11 +173,6 @@ def get_poison_rate_by(feature):
   Compute the proportion of poisonous and edible mushrooms for each category
   of a given feature.
 
-  This function calculates a normalized crosstab between the specified
-  categorical feature and the target variable `is_poisonous`. For each
-  category of the feature, it returns the fraction of mushrooms that are
-  edible and poisonous, sorted from most to least poisonous.
-
   Parameters
   ----------
   feature : str
@@ -199,7 +193,7 @@ def get_poison_rate_by(feature):
 ```
 
 ```{python}
-# Fraction of poisonous mushrooms for each odor category
+# 
 odor_map = {
     "a": "almond",
     "c": "creosote",
@@ -212,65 +206,15 @@ odor_map = {
     "y": "fishy",
 }
 
-odor_ct = get_poison_rate_by('odor').reset_index()
-odor_ct['odor_name'] = odor_ct['odor'].map(odor_map)
-
-alt.Chart(odor_ct).mark_bar().encode(
-    x=alt.X(
-        'poisonous_frac:Q',
-        title="Fraction poisonous"
-        ),
-    y=alt.Y(
-        'odor_name:N', 
-        title="Odor category"
-        ).sort(),
-    tooltip=[
-        alt.Tooltip('odor_name:N', title="Odor category"),
-        alt.Tooltip('poisonous_frac:Q', title="Fraction poisonous", format=".2f")
-    ]
-).properties(
-    title='Poisonous fraction by odor'
-)
-
 ```
 
 ```{python}
-odor_ct_long = odor_ct.melt(
-    id_vars='odor_name',
-    value_vars=['edible_frac', 'poisonous_frac'],
-    var_name='class',
-    value_name='fraction'
-)
-odor_ct_long
-```
-
-```{python}
-alt.Chart(odor_ct_long).mark_bar().encode(
-    y=alt.Y('odor_name:N', title='Odor category', sort='-x'),
-    x=alt.X('fraction:Q', title='Fraction', axis=alt.Axis(format='.2f')),
-    color=alt.Color(
-        'class:N',
-        title='Class',
-        scale=alt.Scale(
-            domain=['edible_frac', 'poisonous_frac'],
-            range=['#17BECF', '#7E1E9C']
-        ),
-        legend=alt.Legend(title="Mushroom class")
-    ),
-    tooltip=[
-        alt.Tooltip('odor_name:N', title='Odor'),
-        alt.Tooltip('class:N', title='Class'),
-        alt.Tooltip('fraction:Q', title='Fraction', format='.2f')
-    ]
-).properties(
-    title='Distribution of poisonous vs edible mushrooms by odor',
-    width=450
-)
-
-```
-
-```{python}
-def stacked_poison_chart(feature: str, feature_label: str | None = None):
+def stacked_poison_chart(
+    figure_number: int,
+    feature: str,
+    feature_label: str | None = None,
+    category_labels: dict[str, str] | None = None,
+):
     """
     Create a stacked bar chart showing edible vs poisonous fractions
     for each category of a given feature.
@@ -281,6 +225,10 @@ def stacked_poison_chart(feature: str, feature_label: str | None = None):
         Column name in df (e.g., "odor", "gill_size", "habitat").
     feature_label : str, optional
         Pretty label for axes / title. If None, derived from the column name.
+    category_labels : dict[str, str], optional
+        Optional mapping from raw category codes to human-readable labels.
+        For example, for odor: {"a": "almond", "n": "none", ...}.
+        If provided, these labels will be used on the y-axis and in tooltips.
 
     Returns
     -------
@@ -294,12 +242,24 @@ def stacked_poison_chart(feature: str, feature_label: str | None = None):
     # Table of edible / poisonous fractions by category
     ct = get_poison_rate_by(feature).reset_index()
 
+    # If a category label map is provided, add a display column
+    if category_labels is not None:
+        display_col = f"{feature}_label"
+        ct[display_col] = ct[feature].map(category_labels).fillna(ct[feature])
+    else:
+        display_col = feature  # use the raw feature values
+
     # Long format for stacked bars
     long_df = ct.melt(
-        id_vars=feature,
+        id_vars=display_col,
         value_vars=["edible_frac", "poisonous_frac"],
         var_name="class",
         value_name="fraction",
+    )
+
+    # Human-readable class labels for legend
+    long_df["class_label"] = long_df["class"].map(
+        {"edible_frac": "Edible", "poisonous_frac": "Poisonous"}
     )
 
     # Build stacked bar chart
@@ -307,39 +267,35 @@ def stacked_poison_chart(feature: str, feature_label: str | None = None):
         alt.Chart(long_df)
         .mark_bar()
         .encode(
-            y=alt.Y(f"{feature}:N", title=feature_label, sort="-x"),
+            y=alt.Y(f"{display_col}:N", title=feature_label, sort="-x"),
             x=alt.X("fraction:Q", title="Fraction", axis=alt.Axis(format=".2f")),
             color=alt.Color(
-                "class:N",
-                title="Class",
+                "class_label:N",
+                title="Mushroom class",
                 scale=alt.Scale(
-                    domain=["edible_frac", "poisonous_frac"],
+                    domain=["Edible", "Poisonous"],
                     range=["#17BECF", "#7E1E9C"],
                 ),
                 legend=alt.Legend(title="Mushroom class"),
             ),
             tooltip=[
-                alt.Tooltip(f"{feature}:N", title=feature_label),
-                alt.Tooltip("class:N", title="Class"),
+                alt.Tooltip(f"{display_col}:N", title=feature_label),
+                alt.Tooltip("class_label:N", title="Class"),
                 alt.Tooltip("fraction:Q", title="Fraction", format=".2f"),
             ],
         )
         .properties(
-            title=f"Distribution of poisonous vs edible mushrooms by {feature_label.lower()}",
+            title=f"Class proportions (edible vs poisonous) by {feature_label.lower()}",
             width=450,
         )
     )
     return chart
 
-
-
 ```
-
 ```{python}
 
-# Odor (what you already had)
-stacked_poison_chart("odor", "Odor category")
-
+# Fraction of poisonous mushrooms for each odor category
+stacked_poison_chart("odor", "Odor category", odor_map)
 
 ```
 
@@ -350,13 +306,11 @@ stacked_poison_chart("odor", "Odor category")
 # Gill size
 stacked_poison_chart("gill_size", "Gill size")
 
-
 ```
 
 
 
 ```{python}
-
 # Habitat
 stacked_poison_chart("habitat", "Habitat")
 

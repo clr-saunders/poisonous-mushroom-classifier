@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.23">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders">
+<meta name="dcterms.date" content="2025-11-18">
+
+<title>Mushroom Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="poisonous_mushroom_classifier_files/libs/clipboard/clipboard.min.js"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/popper.min.js"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="poisonous_mushroom_classifier_files/libs/quarto-html/anchor.min.js"></script>
+<link href="poisonous_mushroom_classifier_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="poisonous_mushroom_classifier_files/libs/quarto-html/quarto-syntax-highlighting-1fe81d0376b2c50856e68e651e390326.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="poisonous_mushroom_classifier_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="poisonous_mushroom_classifier_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="poisonous_mushroom_classifier_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="poisonous_mushroom_classifier.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mushroom Classification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 18, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="ef080ae7" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>(Insert summary after analysis and discussion complete)</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The Agaricus and Lepiota (Agaricaceae) family of mushrooms, includes many of the common gilled mushrooms found and cultivated in urban and suburban North America (Lincoff, 1981, 500). The family includes the common cultivated mushroom (Agaricus bisporus), and some of the best edible mushrooms, but it also includes poisonous mushrooms and a few that are deadly(500). These mushrooms are sometimes found in forests, but many grow on lawns, in the compost, or along roadsides and grassy areas where they are readily accessible for human consumption (500). Accurate assessment of the edibility of these mushrooms is extremely important prior to consumption, however there is no simple rule for determining whether any example is poisonous or edible (500-505).</p>
+<p>Here we ask if we can use a supervised machine learning algorithm to predict whether a given mushroom from the Agaricus and Lepiota family of mushrooms is edible or poisonous, based upon it’s physical characteristics. Answering this question is important because mushroom poisonings are common and the greatest risk factor for mushroom poisoning is the misidentification of poisonous species as edible, in particular by amateur mushroom foragers and immigrants (Diaz, 2016) If made accessible to the public in North America, accurate prediction of mushrooms in this family could prevent poisoning and support the safe consumption of common edible mushrooms.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>The data set used in this project includes hypothetical mushroom samples drawn from The Audobon Society Field Guide to North American Mushrooms by Gary Lincoff (1981, 500-525). It was sourced from the UCI Machine Learning Repository, and can be found <a href="https://archive.ics.uci.edu/dataset/73/mushroom">here</a>, specifically the file <em>agarius-lepiota.data</em>. It includes 8124 descriptions of hypothetical mushroom samples that correspond to 23 species of mushrooms in the Agaricus and Lepiota Family (Mushroom, 1981). Each row includes 22 categorical variables that are physical characteristics of the mushroom sample, including the odor, gill-spacing, gill-color, gill-size, population, habitat, etc, and is labelled as edible or poisonous.</p>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<div id="9eef79d0" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#adding the downloaded data to the data directory by code</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># download data as zip and extract</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://archive.ics.uci.edu/static/public/73/mushroom.zip"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../data/raw/mushroom.zip"</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    f.write(response.content)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">"../data/raw/mushroom.zip"</span>, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">"../data/raw"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="data-cleaning-and-wrangling" class="level1">
+<h1>Data cleaning and wrangling</h1>
+<div id="dfb89130" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>col_names <span class="op">=</span> [</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"class"</span>, <span class="st">"cap_shape"</span>, <span class="st">"cap_surface"</span>, <span class="st">"cap_color"</span>, <span class="st">"bruises"</span>, <span class="st">"odor"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gill_attachment"</span>, <span class="st">"gill_spacing"</span>, <span class="st">"gill_size"</span>, <span class="st">"gill_color"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stalk_shape"</span>, <span class="st">"stalk_root"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stalk_surface_above_ring"</span>, <span class="st">"stalk_surface_below_ring"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stalk_color_above_ring"</span>, <span class="st">"stalk_color_below_ring"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"veil_type"</span>, <span class="st">"veil_color"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ring_number"</span>, <span class="st">"ring_type"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spore_print_color"</span>, <span class="st">"population"</span>, <span class="st">"habitat"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../data/raw/agaricus-lepiota.data"</span>, names<span class="op">=</span>col_names)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing the target to numeric values: poisonous=1, edible=0</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"class_label"</span>] <span class="op">=</span> df[<span class="st">"class"</span>].<span class="bu">map</span>({<span class="st">"p"</span>: <span class="dv">1</span>, <span class="st">"e"</span>: <span class="dv">0</span>})</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with na in the target column</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">"class_label"</span>])</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">class</th>
+<th data-quarto-table-cell-role="th">cap_shape</th>
+<th data-quarto-table-cell-role="th">cap_surface</th>
+<th data-quarto-table-cell-role="th">cap_color</th>
+<th data-quarto-table-cell-role="th">bruises</th>
+<th data-quarto-table-cell-role="th">odor</th>
+<th data-quarto-table-cell-role="th">gill_attachment</th>
+<th data-quarto-table-cell-role="th">gill_spacing</th>
+<th data-quarto-table-cell-role="th">gill_size</th>
+<th data-quarto-table-cell-role="th">gill_color</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">stalk_color_above_ring</th>
+<th data-quarto-table-cell-role="th">stalk_color_below_ring</th>
+<th data-quarto-table-cell-role="th">veil_type</th>
+<th data-quarto-table-cell-role="th">veil_color</th>
+<th data-quarto-table-cell-role="th">ring_number</th>
+<th data-quarto-table-cell-role="th">ring_type</th>
+<th data-quarto-table-cell-role="th">spore_print_color</th>
+<th data-quarto-table-cell-role="th">population</th>
+<th data-quarto-table-cell-role="th">habitat</th>
+<th data-quarto-table-cell-role="th">class_label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>p</td>
+<td>x</td>
+<td>s</td>
+<td>n</td>
+<td>t</td>
+<td>p</td>
+<td>f</td>
+<td>c</td>
+<td>n</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>k</td>
+<td>s</td>
+<td>u</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>e</td>
+<td>x</td>
+<td>s</td>
+<td>y</td>
+<td>t</td>
+<td>a</td>
+<td>f</td>
+<td>c</td>
+<td>b</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>n</td>
+<td>n</td>
+<td>g</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>e</td>
+<td>b</td>
+<td>s</td>
+<td>w</td>
+<td>t</td>
+<td>l</td>
+<td>f</td>
+<td>c</td>
+<td>b</td>
+<td>n</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>n</td>
+<td>n</td>
+<td>m</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>p</td>
+<td>x</td>
+<td>y</td>
+<td>w</td>
+<td>t</td>
+<td>p</td>
+<td>f</td>
+<td>c</td>
+<td>n</td>
+<td>n</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>k</td>
+<td>s</td>
+<td>u</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>e</td>
+<td>x</td>
+<td>s</td>
+<td>g</td>
+<td>f</td>
+<td>n</td>
+<td>f</td>
+<td>w</td>
+<td>b</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>e</td>
+<td>n</td>
+<td>a</td>
+<td>g</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 24 columns</p>
+</div>
+</div>
+</div>
+<div id="2098a883" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rename class_label to is_poisonous for target clarity</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.rename(columns<span class="op">=</span>{<span class="st">'class_label'</span>: <span class="st">'is_poisonous'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="eda-summary" class="level1">
+<h1>EDA summary</h1>
+<div id="611010ba" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic information</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">class</th>
+<th data-quarto-table-cell-role="th">cap_shape</th>
+<th data-quarto-table-cell-role="th">cap_surface</th>
+<th data-quarto-table-cell-role="th">cap_color</th>
+<th data-quarto-table-cell-role="th">bruises</th>
+<th data-quarto-table-cell-role="th">odor</th>
+<th data-quarto-table-cell-role="th">gill_attachment</th>
+<th data-quarto-table-cell-role="th">gill_spacing</th>
+<th data-quarto-table-cell-role="th">gill_size</th>
+<th data-quarto-table-cell-role="th">gill_color</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">stalk_color_above_ring</th>
+<th data-quarto-table-cell-role="th">stalk_color_below_ring</th>
+<th data-quarto-table-cell-role="th">veil_type</th>
+<th data-quarto-table-cell-role="th">veil_color</th>
+<th data-quarto-table-cell-role="th">ring_number</th>
+<th data-quarto-table-cell-role="th">ring_type</th>
+<th data-quarto-table-cell-role="th">spore_print_color</th>
+<th data-quarto-table-cell-role="th">population</th>
+<th data-quarto-table-cell-role="th">habitat</th>
+<th data-quarto-table-cell-role="th">is_poisonous</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>p</td>
+<td>x</td>
+<td>s</td>
+<td>n</td>
+<td>t</td>
+<td>p</td>
+<td>f</td>
+<td>c</td>
+<td>n</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>k</td>
+<td>s</td>
+<td>u</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>e</td>
+<td>x</td>
+<td>s</td>
+<td>y</td>
+<td>t</td>
+<td>a</td>
+<td>f</td>
+<td>c</td>
+<td>b</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>n</td>
+<td>n</td>
+<td>g</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>e</td>
+<td>b</td>
+<td>s</td>
+<td>w</td>
+<td>t</td>
+<td>l</td>
+<td>f</td>
+<td>c</td>
+<td>b</td>
+<td>n</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>n</td>
+<td>n</td>
+<td>m</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>p</td>
+<td>x</td>
+<td>y</td>
+<td>w</td>
+<td>t</td>
+<td>p</td>
+<td>f</td>
+<td>c</td>
+<td>n</td>
+<td>n</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>p</td>
+<td>k</td>
+<td>s</td>
+<td>u</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>e</td>
+<td>x</td>
+<td>s</td>
+<td>g</td>
+<td>f</td>
+<td>n</td>
+<td>f</td>
+<td>w</td>
+<td>b</td>
+<td>k</td>
+<td>...</td>
+<td>w</td>
+<td>w</td>
+<td>p</td>
+<td>w</td>
+<td>o</td>
+<td>e</td>
+<td>n</td>
+<td>a</td>
+<td>g</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 24 columns</p>
+</div>
+</div>
+</div>
+<div id="57fbf47c" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 8124 entries, 0 to 8123
+Data columns (total 24 columns):
+ #   Column                    Non-Null Count  Dtype 
+---  ------                    --------------  ----- 
+ 0   class                     8124 non-null   object
+ 1   cap_shape                 8124 non-null   object
+ 2   cap_surface               8124 non-null   object
+ 3   cap_color                 8124 non-null   object
+ 4   bruises                   8124 non-null   object
+ 5   odor                      8124 non-null   object
+ 6   gill_attachment           8124 non-null   object
+ 7   gill_spacing              8124 non-null   object
+ 8   gill_size                 8124 non-null   object
+ 9   gill_color                8124 non-null   object
+ 10  stalk_shape               8124 non-null   object
+ 11  stalk_root                8124 non-null   object
+ 12  stalk_surface_above_ring  8124 non-null   object
+ 13  stalk_surface_below_ring  8124 non-null   object
+ 14  stalk_color_above_ring    8124 non-null   object
+ 15  stalk_color_below_ring    8124 non-null   object
+ 16  veil_type                 8124 non-null   object
+ 17  veil_color                8124 non-null   object
+ 18  ring_number               8124 non-null   object
+ 19  ring_type                 8124 non-null   object
+ 20  spore_print_color         8124 non-null   object
+ 21  population                8124 non-null   object
+ 22  habitat                   8124 non-null   object
+ 23  is_poisonous              8124 non-null   int64 
+dtypes: int64(1), object(23)
+memory usage: 1.5+ MB</code></pre>
+</div>
+</div>
+<div id="3d548ea1" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>(8124, 24)</code></pre>
+</div>
+</div>
+<div id="0e3c95ba" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>class                       0
+cap_shape                   0
+cap_surface                 0
+cap_color                   0
+bruises                     0
+odor                        0
+gill_attachment             0
+gill_spacing                0
+gill_size                   0
+gill_color                  0
+stalk_shape                 0
+stalk_root                  0
+stalk_surface_above_ring    0
+stalk_surface_below_ring    0
+stalk_color_above_ring      0
+stalk_color_below_ring      0
+veil_type                   0
+veil_color                  0
+ring_number                 0
+ring_type                   0
+spore_print_color           0
+population                  0
+habitat                     0
+is_poisonous                0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="f5a2c70a" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode "missing" (?) as NA</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>(df <span class="op">==</span> <span class="st">'?'</span>).<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>class                          0
+cap_shape                      0
+cap_surface                    0
+cap_color                      0
+bruises                        0
+odor                           0
+gill_attachment                0
+gill_spacing                   0
+gill_size                      0
+gill_color                     0
+stalk_shape                    0
+stalk_root                  2480
+stalk_surface_above_ring       0
+stalk_surface_below_ring       0
+stalk_color_above_ring         0
+stalk_color_below_ring         0
+veil_type                      0
+veil_color                     0
+ring_number                    0
+ring_type                      0
+spore_print_color              0
+population                     0
+habitat                        0
+is_poisonous                   0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="7ff0ffbe" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop stalk_root column </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df.drop(columns<span class="op">=</span>[<span class="st">'stalk_root'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cda56838" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>class                       0
+cap_shape                   0
+cap_surface                 0
+cap_color                   0
+bruises                     0
+odor                        0
+gill_attachment             0
+gill_spacing                0
+gill_size                   0
+gill_color                  0
+stalk_shape                 0
+stalk_surface_above_ring    0
+stalk_surface_below_ring    0
+stalk_color_above_ring      0
+stalk_color_below_ring      0
+veil_type                   0
+veil_color                  0
+ring_number                 0
+ring_type                   0
+spore_print_color           0
+population                  0
+habitat                     0
+is_poisonous                0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="e3c7db31" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect target variable: e = edible = 0, p = poisonous = 1</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_poisonous'</span>].value_counts() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>is_poisonous
+0    4208
+1    3916
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="4f11e2d1" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the proportion of each mushroom class (edible vs poisonous)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_poisonous'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>is_poisonous
+0    0.517971
+1    0.482029
+Name: proportion, dtype: float64</code></pre>
+</div>
+</div>
+<div id="2f4a58e4" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get current col_names</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>col_names <span class="op">=</span> <span class="bu">list</span>(df.columns)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>col_names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>['class',
+ 'cap_shape',
+ 'cap_surface',
+ 'cap_color',
+ 'bruises',
+ 'odor',
+ 'gill_attachment',
+ 'gill_spacing',
+ 'gill_size',
+ 'gill_color',
+ 'stalk_shape',
+ 'stalk_surface_above_ring',
+ 'stalk_surface_below_ring',
+ 'stalk_color_above_ring',
+ 'stalk_color_below_ring',
+ 'veil_type',
+ 'veil_color',
+ 'ring_number',
+ 'ring_type',
+ 'spore_print_color',
+ 'population',
+ 'habitat',
+ 'is_poisonous']</code></pre>
+</div>
+</div>
+<div id="b6199250" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Key mushroom feature summary</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>summary_rows <span class="op">=</span> []</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> col_names:</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    vc <span class="op">=</span> df[col].value_counts()</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    summary_rows.append({</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"feature"</span>: col,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"n_categories"</span>: vc.shape[<span class="dv">0</span>],</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"most_frequent_category"</span>: vc.index[<span class="dv">0</span>],</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"most_frequent_count"</span>: <span class="bu">int</span>(vc.iloc[<span class="dv">0</span>])</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>feature_summary <span class="op">=</span> pd.DataFrame(summary_rows).sort_values(<span class="st">"n_categories"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>feature_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">feature</th>
+<th data-quarto-table-cell-role="th">n_categories</th>
+<th data-quarto-table-cell-role="th">most_frequent_category</th>
+<th data-quarto-table-cell-role="th">most_frequent_count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">9</th>
+<td>gill_color</td>
+<td>12</td>
+<td>b</td>
+<td>1728</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>cap_color</td>
+<td>10</td>
+<td>n</td>
+<td>2284</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5</th>
+<td>odor</td>
+<td>9</td>
+<td>n</td>
+<td>3528</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">19</th>
+<td>spore_print_color</td>
+<td>9</td>
+<td>w</td>
+<td>2388</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">13</th>
+<td>stalk_color_above_ring</td>
+<td>9</td>
+<td>w</td>
+<td>4464</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">14</th>
+<td>stalk_color_below_ring</td>
+<td>9</td>
+<td>w</td>
+<td>4384</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">21</th>
+<td>habitat</td>
+<td>7</td>
+<td>d</td>
+<td>3148</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>cap_shape</td>
+<td>6</td>
+<td>x</td>
+<td>3656</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">20</th>
+<td>population</td>
+<td>6</td>
+<td>v</td>
+<td>4040</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">18</th>
+<td>ring_type</td>
+<td>5</td>
+<td>p</td>
+<td>3968</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>cap_surface</td>
+<td>4</td>
+<td>y</td>
+<td>3244</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">16</th>
+<td>veil_color</td>
+<td>4</td>
+<td>w</td>
+<td>7924</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">11</th>
+<td>stalk_surface_above_ring</td>
+<td>4</td>
+<td>s</td>
+<td>5176</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">12</th>
+<td>stalk_surface_below_ring</td>
+<td>4</td>
+<td>s</td>
+<td>4936</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">17</th>
+<td>ring_number</td>
+<td>3</td>
+<td>o</td>
+<td>7488</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">6</th>
+<td>gill_attachment</td>
+<td>2</td>
+<td>f</td>
+<td>7914</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>bruises</td>
+<td>2</td>
+<td>f</td>
+<td>4748</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">0</th>
+<td>class</td>
+<td>2</td>
+<td>e</td>
+<td>4208</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>stalk_shape</td>
+<td>2</td>
+<td>t</td>
+<td>4608</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">8</th>
+<td>gill_size</td>
+<td>2</td>
+<td>b</td>
+<td>5612</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">7</th>
+<td>gill_spacing</td>
+<td>2</td>
+<td>c</td>
+<td>6812</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">22</th>
+<td>is_poisonous</td>
+<td>2</td>
+<td>0</td>
+<td>4208</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">15</th>
+<td>veil_type</td>
+<td>1</td>
+<td>p</td>
+<td>8124</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="577e6285" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_poison_rate_by(feature):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Compute the proportion of poisonous and edible mushrooms for each category</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">  of a given feature.</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">  This function calculates a normalized crosstab between the specified</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">  categorical feature and the target variable `is_poisonous`. For each</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">  category of the feature, it returns the fraction of mushrooms that are</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">  edible and poisonous, sorted from most to least poisonous.</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co">  feature : str</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co">      The name of the categorical column in `df` for which the poison rates</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co">      should be calculated.</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="co">  pandas.DataFrame</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co">      A DataFrame indexed by the feature's categories with two columns:</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co">      `edible_frac` and `poisonous_frac`, sorted in descending order of</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co">      `poisonous_frac`.</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  category_poisonous <span class="op">=</span> pd.crosstab(df[feature], df[<span class="st">'is_poisonous'</span>], normalize<span class="op">=</span><span class="st">'index'</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  category_poisonous.columns <span class="op">=</span> [<span class="st">'edible_frac'</span>, <span class="st">'poisonous_frac'</span>]</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> category_poisonous.sort_values(<span class="st">'poisonous_frac'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="05fb0d61" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fraction of poisonous mushrooms for each odor category</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>odor_map <span class="op">=</span> {</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"a"</span>: <span class="st">"almond"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"c"</span>: <span class="st">"creosote"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"f"</span>: <span class="st">"foul"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"l"</span>: <span class="st">"anise"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"m"</span>: <span class="st">"musty"</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n"</span>: <span class="st">"none"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p"</span>: <span class="st">"pungent"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"s"</span>: <span class="st">"spicy"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"y"</span>: <span class="st">"fishy"</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>odor_ct <span class="op">=</span> get_poison_rate_by(<span class="st">'odor'</span>).reset_index()</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>odor_ct[<span class="st">'odor_name'</span>] <span class="op">=</span> odor_ct[<span class="st">'odor'</span>].<span class="bu">map</span>(odor_map)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>alt.Chart(odor_ct).mark_bar().encode(</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'poisonous_frac:Q'</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">"Fraction poisonous"</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">'odor_name:N'</span>, </span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">"Odor category"</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>        ).sort(),</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>        alt.Tooltip(<span class="st">'odor_name:N'</span>, title<span class="op">=</span><span class="st">"Odor category"</span>),</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        alt.Tooltip(<span class="st">'poisonous_frac:Q'</span>, title<span class="op">=</span><span class="st">"Fraction poisonous"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">".2f"</span>)</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>).properties(</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'Poisonous fraction by odor'</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+
+<style>
+  #altair-viz-f982be2a963d48ff9240745dfff256d5.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-f982be2a963d48ff9240745dfff256d5.vega-embed details,
+  #altair-viz-f982be2a963d48ff9240745dfff256d5.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-f982be2a963d48ff9240745dfff256d5"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-f982be2a963d48ff9240745dfff256d5") {
+      outputDiv = document.getElementById("altair-viz-f982be2a963d48ff9240745dfff256d5");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-cb49d7fd159bc2a09431a819411805f5"}, "mark": {"type": "bar"}, "encoding": {"tooltip": [{"field": "odor_name", "title": "Odor category", "type": "nominal"}, {"field": "poisonous_frac", "format": ".2f", "title": "Fraction poisonous", "type": "quantitative"}], "x": {"field": "poisonous_frac", "title": "Fraction poisonous", "type": "quantitative"}, "y": {"field": "odor_name", "sort": {}, "title": "Odor category", "type": "nominal"}}, "title": "Poisonous fraction by odor", "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-cb49d7fd159bc2a09431a819411805f5": [{"odor": "c", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "creosote"}, {"odor": "y", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "fishy"}, {"odor": "f", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "foul"}, {"odor": "m", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "musty"}, {"odor": "p", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "pungent"}, {"odor": "s", "edible_frac": 0.0, "poisonous_frac": 1.0, "odor_name": "spicy"}, {"odor": "n", "edible_frac": 0.9659863945578231, "poisonous_frac": 0.034013605442176874, "odor_name": "none"}, {"odor": "a", "edible_frac": 1.0, "poisonous_frac": 0.0, "odor_name": "almond"}, {"odor": "l", "edible_frac": 1.0, "poisonous_frac": 0.0, "odor_name": "anise"}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="7c9cf090" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>odor_ct_long <span class="op">=</span> odor_ct.melt(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span><span class="st">'odor_name'</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    value_vars<span class="op">=</span>[<span class="st">'edible_frac'</span>, <span class="st">'poisonous_frac'</span>],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    var_name<span class="op">=</span><span class="st">'class'</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">'fraction'</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>odor_ct_long</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">odor_name</th>
+<th data-quarto-table-cell-role="th">class</th>
+<th data-quarto-table-cell-role="th">fraction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>creosote</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>fishy</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>foul</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>musty</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>pungent</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>spicy</td>
+<td>edible_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>none</td>
+<td>edible_frac</td>
+<td>0.965986</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>almond</td>
+<td>edible_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>anise</td>
+<td>edible_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>creosote</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>fishy</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>foul</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>musty</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>pungent</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>spicy</td>
+<td>poisonous_frac</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">15</th>
+<td>none</td>
+<td>poisonous_frac</td>
+<td>0.034014</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">16</th>
+<td>almond</td>
+<td>poisonous_frac</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">17</th>
+<td>anise</td>
+<td>poisonous_frac</td>
+<td>0.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="8bf0861c" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(odor_ct_long).mark_bar().encode(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">'odor_name:N'</span>, title<span class="op">=</span><span class="st">'Odor category'</span>, sort<span class="op">=</span><span class="st">'-x'</span>),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">'fraction:Q'</span>, title<span class="op">=</span><span class="st">'Fraction'</span>, axis<span class="op">=</span>alt.Axis(<span class="bu">format</span><span class="op">=</span><span class="st">'.2f'</span>)),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>alt.Color(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">'class:N'</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">'Class'</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        scale<span class="op">=</span>alt.Scale(</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            domain<span class="op">=</span>[<span class="st">'edible_frac'</span>, <span class="st">'poisonous_frac'</span>],</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>            <span class="bu">range</span><span class="op">=</span>[<span class="st">'#17BECF'</span>, <span class="st">'#7E1E9C'</span>]</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span>alt.Legend(title<span class="op">=</span><span class="st">"Mushroom class"</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        alt.Tooltip(<span class="st">'odor_name:N'</span>, title<span class="op">=</span><span class="st">'Odor'</span>),</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        alt.Tooltip(<span class="st">'class:N'</span>, title<span class="op">=</span><span class="st">'Class'</span>),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        alt.Tooltip(<span class="st">'fraction:Q'</span>, title<span class="op">=</span><span class="st">'Fraction'</span>, <span class="bu">format</span><span class="op">=</span><span class="st">'.2f'</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>).properties(</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'Distribution of poisonous vs edible mushrooms by odor'</span>,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">450</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+
+<style>
+  #altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce.vega-embed details,
+  #altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce") {
+      outputDiv = document.getElementById("altair-viz-aa86c62b58ef469ba7be6efdf7dc13ce");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-374b601bb2dfb13c8ffbb345b8b13289"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "class", "legend": {"title": "Mushroom class"}, "scale": {"domain": ["edible_frac", "poisonous_frac"], "range": ["#17BECF", "#7E1E9C"]}, "title": "Class", "type": "nominal"}, "tooltip": [{"field": "odor_name", "title": "Odor", "type": "nominal"}, {"field": "class", "title": "Class", "type": "nominal"}, {"field": "fraction", "format": ".2f", "title": "Fraction", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "fraction", "title": "Fraction", "type": "quantitative"}, "y": {"field": "odor_name", "sort": "-x", "title": "Odor category", "type": "nominal"}}, "title": "Distribution of poisonous vs edible mushrooms by odor", "width": 450, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-374b601bb2dfb13c8ffbb345b8b13289": [{"odor_name": "creosote", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "fishy", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "foul", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "musty", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "pungent", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "spicy", "class": "edible_frac", "fraction": 0.0}, {"odor_name": "none", "class": "edible_frac", "fraction": 0.9659863945578231}, {"odor_name": "almond", "class": "edible_frac", "fraction": 1.0}, {"odor_name": "anise", "class": "edible_frac", "fraction": 1.0}, {"odor_name": "creosote", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "fishy", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "foul", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "musty", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "pungent", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "spicy", "class": "poisonous_frac", "fraction": 1.0}, {"odor_name": "none", "class": "poisonous_frac", "fraction": 0.034013605442176874}, {"odor_name": "almond", "class": "poisonous_frac", "fraction": 0.0}, {"odor_name": "anise", "class": "poisonous_frac", "fraction": 0.0}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="a3882f70" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stacked_poison_chart(feature: <span class="bu">str</span>, feature_label: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Create a stacked bar chart showing edible vs poisonous fractions</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">    for each category of a given feature.</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co">    feature : str</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">        Column name in df (e.g., "odor", "gill_size", "habitat").</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co">    feature_label : str, optional</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">        Pretty label for axes / title. If None, derived from the column name.</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co">    alt.Chart</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Altair chart object with stacked bars.</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use a nicer label if not provided</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> feature_label <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        feature_label <span class="op">=</span> feature.replace(<span class="st">"_"</span>, <span class="st">" "</span>).title()</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Table of edible / poisonous fractions by category</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    ct <span class="op">=</span> get_poison_rate_by(feature).reset_index()</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Long format for stacked bars</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>    long_df <span class="op">=</span> ct.melt(</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>        id_vars<span class="op">=</span>feature,</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>        value_vars<span class="op">=</span>[<span class="st">"edible_frac"</span>, <span class="st">"poisonous_frac"</span>],</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>        var_name<span class="op">=</span><span class="st">"class"</span>,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>        value_name<span class="op">=</span><span class="st">"fraction"</span>,</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build stacked bar chart</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    chart <span class="op">=</span> (</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>        alt.Chart(long_df)</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>        .mark_bar()</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>        .encode(</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>            y<span class="op">=</span>alt.Y(<span class="ss">f"</span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">:N"</span>, title<span class="op">=</span>feature_label, sort<span class="op">=</span><span class="st">"-x"</span>),</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>            x<span class="op">=</span>alt.X(<span class="st">"fraction:Q"</span>, title<span class="op">=</span><span class="st">"Fraction"</span>, axis<span class="op">=</span>alt.Axis(<span class="bu">format</span><span class="op">=</span><span class="st">".2f"</span>)),</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>            color<span class="op">=</span>alt.Color(</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>                <span class="st">"class:N"</span>,</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>                title<span class="op">=</span><span class="st">"Class"</span>,</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>                scale<span class="op">=</span>alt.Scale(</span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>                    domain<span class="op">=</span>[<span class="st">"edible_frac"</span>, <span class="st">"poisonous_frac"</span>],</span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">range</span><span class="op">=</span>[<span class="st">"#17BECF"</span>, <span class="st">"#7E1E9C"</span>],</span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>                legend<span class="op">=</span>alt.Legend(title<span class="op">=</span><span class="st">"Mushroom class"</span>),</span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>            tooltip<span class="op">=</span>[</span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>                alt.Tooltip(<span class="ss">f"</span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">:N"</span>, title<span class="op">=</span>feature_label),</span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>                alt.Tooltip(<span class="st">"class:N"</span>, title<span class="op">=</span><span class="st">"Class"</span>),</span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a>                alt.Tooltip(<span class="st">"fraction:Q"</span>, title<span class="op">=</span><span class="st">"Fraction"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">".2f"</span>),</span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>        .properties(</span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="ss">f"Distribution of poisonous vs edible mushrooms by </span><span class="sc">{</span>feature_label<span class="sc">.</span>lower()<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>            width<span class="op">=</span><span class="dv">450</span>,</span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chart</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c26dc1c5" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Odor (what you already had)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>stacked_poison_chart(<span class="st">"odor"</span>, <span class="st">"Odor category"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+
+<style>
+  #altair-viz-a4ed9824d38248558dfd207bff6be958.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-a4ed9824d38248558dfd207bff6be958.vega-embed details,
+  #altair-viz-a4ed9824d38248558dfd207bff6be958.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-a4ed9824d38248558dfd207bff6be958"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-a4ed9824d38248558dfd207bff6be958") {
+      outputDiv = document.getElementById("altair-viz-a4ed9824d38248558dfd207bff6be958");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-58967b8bb2c4409b8b806e2513376a9f"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "class", "legend": {"title": "Mushroom class"}, "scale": {"domain": ["edible_frac", "poisonous_frac"], "range": ["#17BECF", "#7E1E9C"]}, "title": "Class", "type": "nominal"}, "tooltip": [{"field": "odor", "title": "Odor category", "type": "nominal"}, {"field": "class", "title": "Class", "type": "nominal"}, {"field": "fraction", "format": ".2f", "title": "Fraction", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "fraction", "title": "Fraction", "type": "quantitative"}, "y": {"field": "odor", "sort": "-x", "title": "Odor category", "type": "nominal"}}, "title": "Distribution of poisonous vs edible mushrooms by odor category", "width": 450, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-58967b8bb2c4409b8b806e2513376a9f": [{"odor": "c", "class": "edible_frac", "fraction": 0.0}, {"odor": "y", "class": "edible_frac", "fraction": 0.0}, {"odor": "f", "class": "edible_frac", "fraction": 0.0}, {"odor": "m", "class": "edible_frac", "fraction": 0.0}, {"odor": "p", "class": "edible_frac", "fraction": 0.0}, {"odor": "s", "class": "edible_frac", "fraction": 0.0}, {"odor": "n", "class": "edible_frac", "fraction": 0.9659863945578231}, {"odor": "a", "class": "edible_frac", "fraction": 1.0}, {"odor": "l", "class": "edible_frac", "fraction": 1.0}, {"odor": "c", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "y", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "f", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "m", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "p", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "s", "class": "poisonous_frac", "fraction": 1.0}, {"odor": "n", "class": "poisonous_frac", "fraction": 0.034013605442176874}, {"odor": "a", "class": "poisonous_frac", "fraction": 0.0}, {"odor": "l", "class": "poisonous_frac", "fraction": 0.0}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="1636ac57" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gill size</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>stacked_poison_chart(<span class="st">"gill_size"</span>, <span class="st">"Gill size"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+
+<style>
+  #altair-viz-a26262df1ef74bf89bfea565d17a5123.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-a26262df1ef74bf89bfea565d17a5123.vega-embed details,
+  #altair-viz-a26262df1ef74bf89bfea565d17a5123.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-a26262df1ef74bf89bfea565d17a5123"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-a26262df1ef74bf89bfea565d17a5123") {
+      outputDiv = document.getElementById("altair-viz-a26262df1ef74bf89bfea565d17a5123");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-92e7746b4dbdfe98893e3fb3bd426d94"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "class", "legend": {"title": "Mushroom class"}, "scale": {"domain": ["edible_frac", "poisonous_frac"], "range": ["#17BECF", "#7E1E9C"]}, "title": "Class", "type": "nominal"}, "tooltip": [{"field": "gill_size", "title": "Gill size", "type": "nominal"}, {"field": "class", "title": "Class", "type": "nominal"}, {"field": "fraction", "format": ".2f", "title": "Fraction", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "fraction", "title": "Fraction", "type": "quantitative"}, "y": {"field": "gill_size", "sort": "-x", "title": "Gill size", "type": "nominal"}}, "title": "Distribution of poisonous vs edible mushrooms by gill size", "width": 450, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-92e7746b4dbdfe98893e3fb3bd426d94": [{"gill_size": "n", "class": "edible_frac", "fraction": 0.11464968152866242}, {"gill_size": "b", "class": "edible_frac", "fraction": 0.6985032074126871}, {"gill_size": "n", "class": "poisonous_frac", "fraction": 0.8853503184713376}, {"gill_size": "b", "class": "poisonous_frac", "fraction": 0.3014967925873129}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="f15f45a8" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Habitat</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>stacked_poison_chart(<span class="st">"habitat"</span>, <span class="st">"Habitat"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+
+<style>
+  #altair-viz-8468ff07d3a84dc7a84b7d55b13286ed.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-8468ff07d3a84dc7a84b7d55b13286ed.vega-embed details,
+  #altair-viz-8468ff07d3a84dc7a84b7d55b13286ed.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-8468ff07d3a84dc7a84b7d55b13286ed"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-8468ff07d3a84dc7a84b7d55b13286ed") {
+      outputDiv = document.getElementById("altair-viz-8468ff07d3a84dc7a84b7d55b13286ed");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-b40d23f155b318a35c9e09a7235a7811"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "class", "legend": {"title": "Mushroom class"}, "scale": {"domain": ["edible_frac", "poisonous_frac"], "range": ["#17BECF", "#7E1E9C"]}, "title": "Class", "type": "nominal"}, "tooltip": [{"field": "habitat", "title": "Habitat", "type": "nominal"}, {"field": "class", "title": "Class", "type": "nominal"}, {"field": "fraction", "format": ".2f", "title": "Fraction", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "fraction", "title": "Fraction", "type": "quantitative"}, "y": {"field": "habitat", "sort": "-x", "title": "Habitat", "type": "nominal"}}, "title": "Distribution of poisonous vs edible mushrooms by habitat", "width": 450, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-b40d23f155b318a35c9e09a7235a7811": [{"habitat": "p", "class": "edible_frac", "fraction": 0.11888111888111888}, {"habitat": "u", "class": "edible_frac", "fraction": 0.2608695652173913}, {"habitat": "l", "class": "edible_frac", "fraction": 0.28846153846153844}, {"habitat": "d", "class": "edible_frac", "fraction": 0.5972045743329097}, {"habitat": "g", "class": "edible_frac", "fraction": 0.6554934823091247}, {"habitat": "m", "class": "edible_frac", "fraction": 0.8767123287671232}, {"habitat": "w", "class": "edible_frac", "fraction": 1.0}, {"habitat": "p", "class": "poisonous_frac", "fraction": 0.8811188811188811}, {"habitat": "u", "class": "poisonous_frac", "fraction": 0.7391304347826086}, {"habitat": "l", "class": "poisonous_frac", "fraction": 0.7115384615384616}, {"habitat": "d", "class": "poisonous_frac", "fraction": 0.4027954256670902}, {"habitat": "g", "class": "poisonous_frac", "fraction": 0.34450651769087526}, {"habitat": "m", "class": "poisonous_frac", "fraction": 0.1232876712328767}, {"habitat": "w", "class": "poisonous_frac", "fraction": 0.0}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</section>
+<section id="results-discussion" class="level1">
+<h1>Results &amp; Discussion</h1>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Lincoff, G. H. (1981).The Audubon Society Field Guide to North American Mushrooms (1981). New York: Alfred A. Knopf</p>
+<p>Mushroom. (1981). UCI Machine Learning Repository. https://doi.org/10.24432/C5959T</p>
+<p>Diaz, J. H. (2016). Mistaken mushroom poisonings. Wilderness &amp; Environmental Medicine, 27(2), 330-335.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
