@@ -122,8 +122,8 @@ df.isna().sum()
 ```
 
 ```{python}
-# Encode "missing" (?) as NA
-df = df.replace('?', np.nan)
+# Drop stalk_root column 
+df.drop(columns=['stalk_root'], inplace=True)
 
 ```
 
