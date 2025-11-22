@@ -4,7 +4,10 @@ author: "Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders"
 date: "November 18, 2025"
 jupyter: python3
 format:
-  pdf: default
+    pdf: 
+        fig-align: left
+    html:
+        fig-align: left
 execute:
   echo: true
   warning: false
