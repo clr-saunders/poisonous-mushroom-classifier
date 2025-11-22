@@ -45,9 +45,9 @@ The software code contained within this repository is licensed under the **MIT L
 See the [LICENSE](LICENSE) file for more information.
 
 ## References
-Lincoff, G. H. (1981).The Audubon Society Field Guide to North American Mushrooms (1981). New York: Alfred A. Knopf
-
 Mushroom. (1981). UCI Machine Learning Repository. https://doi.org/10.24432/C5959T
+
+Lincoff, G. H. (1981).The Audubon Society Field Guide to North American Mushrooms (1981). New York: Alfred A. Knopf
 
 Diaz, J. H. (2016). Mistaken mushroom poisonings. Wilderness & Environmental Medicine, 27(2), 330-335
 
