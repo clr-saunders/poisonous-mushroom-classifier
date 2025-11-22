@@ -27,7 +27,7 @@ conda-lock install --name poisonous_mushroom_classifier conda-lock.yml
 Then, activate the environment:
 
 ```bash
-conda activate poisonous-mushroom-classifier
+conda activate poisonous_mushroom_classifier
 ```
 
 To run the analysis, run the following from the root of this repository:
