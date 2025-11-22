@@ -51,3 +51,4 @@ Mushroom. (1981). UCI Machine Learning Repository. https://doi.org/10.24432/C595
 
 Diaz, J. H. (2016). Mistaken mushroom poisonings. Wilderness & Environmental Medicine, 27(2), 330-335
 
+Buitinck, L., Louppe, G., Blondel, M., Pedregosa,               Fabian, Mueller, A., Grisel, O., … Ga"el Varoquaux. (2013). API design for machine learning software: experiences from the scikit-learn              project. In ECML PKDD Workshop: Languages for Data Mining and Machine Learning (pp. 108–122).
