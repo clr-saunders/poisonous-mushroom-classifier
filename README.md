@@ -21,7 +21,7 @@ The final report can be found [here](notebooks/poisonous_mushroom_classifier.qmd
 First time running the project, run the following from the root of this repository:
 
 ```bash
-conda-lock install --name poisonous-mushroom-classifier conda-lock.yml
+conda-lock install --name poisonous_mushroom_classifier conda-lock.yml
 ```
 
 Then, activate the environment:
