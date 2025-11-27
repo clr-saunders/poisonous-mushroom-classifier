@@ -20,7 +20,9 @@ import zipfile
 import pandas as pd
 import numpy as np
 import altair as alt
+import pandera as pa
 alt.renderers.enable("png")
+
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.dummy import DummyClassifier
@@ -28,6 +30,7 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from pandera import check
 ```
 
 # Summary
@@ -101,6 +104,8 @@ df.head()
 ```
 
 A preview of the first five rows of the raw dataset is shown in Table @tbl-sample-data, which illustrates the categorical structure of all features prior to cleaning.
+
+
 
 ```{python}
 df.isna().sum()
