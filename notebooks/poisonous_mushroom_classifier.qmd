@@ -81,7 +81,7 @@ with zipfile.ZipFile("../data/raw/mushroom.zip", 'r') as zip_ref:
 #| label: tbl-sample-data
 #| tbl-cap: "First five rows of the dataset."
 
-col_names = [
+dataset_col_names = [
     "class", "cap_shape", "cap_surface", "cap_color", "bruises", "odor",
     "gill_attachment", "gill_spacing", "gill_size", "gill_color",
     "stalk_shape", "stalk_root",
@@ -92,7 +92,7 @@ col_names = [
     "spore_print_color", "population", "habitat"
 ]
 
-df = pd.read_csv("../data/raw/agaricus-lepiota.data", names=col_names)
+df = pd.read_csv("../data/raw/agaricus-lepiota.data", names=dataset_col_names)
 
 # Data Validation Check: Target follows expected distribution
 actual_distribution = df['class'].value_counts(normalize=True).round(3).to_dict()
@@ -121,7 +121,7 @@ df.isna().sum()
 ```
 
 ```{python}
-# Drop stalk_root column and original target column "class" because numeric column of target values "is_poisonous" added to replace it
+# Drop stalk_root column due to missing values and original target column "class" because numeric column of target values "is_poisonous" added to replace it. 
 df.drop(columns=['stalk_root', 'class'], inplace=True)
 
 ```
@@ -142,13 +142,16 @@ df.info()
 
 ```{python}
 df.shape
-
 ```
 
 ```{python}
-# Get current col_names
-col_names = list(df.columns)
-col_names
+# Data Validation Check: Correct Column Names
+
+# given that the dataset we read in for this model did not include headers, we assigned the names and hence encoded the correct column names initially upon read in. Here, I confirm the column names match expectations after dropping "stalk_root" and changing the name of "class" to "is_poisonous"
+
+expected_col_names = [col for col in dataset_col_names if col not in ['stalk_root', 'class']] + ['is_poisonous']
+actual_col_names = list(df.columns)
+assert expected_col_names == actual_col_names, "The dataframe does not have the expected column names"
 ```
 
 # Data Splitting 
@@ -171,9 +174,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 #| label: tbl-feature-summary
 #| tbl-cap: "Summary of mushroom feature characteristics"
 
+
 # Key mushroom feature summary
 summary_rows = []
-for col in col_names:
+for col in actual_col_names:
     if not col == 'is_poisonous':
         vc = X_train[col].value_counts()
         summary_rows.append({
@@ -435,7 +439,6 @@ feature_importance_eda = pd.DataFrame(feature_scores).sort_values(
 
 feature_importance_eda.index = feature_importance_eda.index + 1
 feature_importance_eda
-
 
 ```
 
