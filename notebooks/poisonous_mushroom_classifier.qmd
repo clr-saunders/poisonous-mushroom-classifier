@@ -383,12 +383,19 @@ df = mushroom_schema.validate(df, lazy=True)
 # EDA Before Data Splitting 
 
 ```{python}
+#| label: tbl-sample-cleaned
+#| tbl-cap: "First five rows of the cleaned dataset."
+df.head()
+```
+
+```{python}
 # Basic information
 df.info()
 
 ```
 
 ```{python}
+# Data dimensions
 df.shape
 ```
 
@@ -399,28 +406,82 @@ We are trying to classify whether a mushroom is edible (0) or poisonous (1). Goi
 A random state of `123` will ensure reproducibility when ran by subsequent users.
 
 ```{python}
+# Train–test split at the row level
+#   - Keeps all columns together in each split
+#   - Stratify on the target to preserve class balance
 
-X_train, X_test, y_train, y_test = train_test_split(
-    df.loc[:,'cap_shape':'habitat'], df['is_poisonous'], test_size=0.3, random_state=123
+train_df, test_df = train_test_split(
+    df,
+    test_size=0.3,
+    random_state=123,
+    stratify=df["is_poisonous"],
 )
 
-# Data Validation Check: Target distribution is as expected, ie. representative in Train and Test Set
-print("Overall proportion poisonous:", df['is_poisonous'].mean())
-print("Train set proportion poisonous:", y_train.mean())
-print("Test set proportion poisonous:", y_test.mean())
+print(
+    "Train df shape: ", train_df.shape,
+    "\nTest df shape: ", test_df.shape
+    )
 
 ```
 
+```{python}
+# Build X/y for model training and evaluation from splits
+X_train = train_df.drop(columns=["is_poisonous"])
+y_train = train_df["is_poisonous"]
+
+X_test = test_df.drop(columns=["is_poisonous"])
+y_test = test_df["is_poisonous"]
+```
 
 # EDA After Data Splitting 
+
+```{python}
+# Sanity check: class balance in the training data
+
+train_target_counts = train_df["is_poisonous"].value_counts()
+train_target_prop = train_df["is_poisonous"].value_counts(normalize=True)
+
+print("Training set class counts:")
+print(train_target_counts.rename(index={0: "edible (0)", 1: "poisonous (1)"}))
+
+print("\nTraining set class proportions:")
+print(train_target_prop.rename(index={0: "edible (0)", 1: "poisonous (1)"}).round(3))
+```
+
+```{python}
+# Data Validation: check training target distribution roughly matches UCI proportions
+
+expected_dist = {"e": 0.518, "p": 0.482}
+# but now we’re working with numeric target: 0 = edible, 1 = poisonous
+expected_poisonous = expected_dist["p"]  # 0.482
+
+train_poisonous = train_df["is_poisonous"].mean()
+tol = 0.02
+
+assert abs(train_poisonous - expected_poisonous) <= tol, (
+    f"Training set poisonous proportion ({train_poisonous:.3f}) "
+    f"differs from expected ({expected_poisonous:.3f}) by more than {tol:.2f}."
+)
+
+print(
+    f"[OK] Training set poisonous proportion ({train_poisonous:.3f}) "
+    f"is close to expected ({expected_poisonous:.3f})."
+)
+
+```
+
+```{python}
+# Feature column names
+feature_cols = X_train.columns
+```
+
 ```{python}
 #| label: tbl-feature-summary
 #| tbl-cap: "Summary of mushroom feature characteristics"
 
-
 # Key mushroom feature summary
 summary_rows = []
-for col in actual_col_names:
+for col in feature_cols:
     if not col == 'is_poisonous':
         vc = X_train[col].value_counts()
         summary_rows.append({
@@ -435,6 +496,7 @@ feature_summary = (
     .sort_values("n_categories", ascending=False)
     .reset_index(drop=True)    
 )
+
 feature_summary.index = feature_summary.index + 1
 feature_summary
 
@@ -443,13 +505,21 @@ feature_summary
 We summarize all 21 categorical predictors in Table @tbl-feature-summary, which reports the number of levels and the dominant category for each feature. Given that veil_type only has one level, the values are the same for all observations so we drop that column. 
 
 ```{python}
-X_train.drop('veil_type', axis=1, inplace=True)
-X_test.drop('veil_type', axis=1, inplace=True)
+# Drop veil_type from the feature matrices used for modeling. If check added to prevent error if not present_ in case the cell is run multiple times
+if "veil_type" in X_train.columns:
+    X_train = X_train.drop(columns=["veil_type"])
+    X_test = X_test.drop(columns=["veil_type"])
+    
+    # Redefine feature columns
+    feature_cols = X_train.columns
 
 ```
 
+`veil_type` was dropped because it contains only a single category for all observations.
+A feature with no variation cannot help the model distinguish edible from poisonous mushrooms, provides no predictive signal, and only adds redundant columns after one-hot encoding. Therefore, it is removed to simplify the feature set and prevent unnecessary model complexity.
+
 ```{python}
-def get_poison_rate_by(feature):
+def get_poison_rate_by(feature: str) -> pd.DataFrame:
   """
   Compute the proportion of poisonous and edible mushrooms for each category
   of a given feature.
@@ -467,7 +537,9 @@ def get_poison_rate_by(feature):
       `edible_frac` and `poisonous_frac`, sorted in descending order of
       `poisonous_frac`.
   """
-  category_poisonous = pd.crosstab(df[feature], df['is_poisonous'], normalize='index')
+  category_poisonous = pd.crosstab(train_df[feature], train_df['is_poisonous'], normalize='index')
+
+  # By construction, column 0 = edible, 1 = poisonous
   category_poisonous.columns = ['edible_frac', 'poisonous_frac']
   return category_poisonous.sort_values('poisonous_frac', ascending=False)
 
@@ -657,35 +729,6 @@ stacked_poison_chart("population", "Population", population_map)
 
 ```
 
-```{python}
-# Column names without veil_type, or target column
-exclude = ["veil_type", "class", "is_poisonous"]  # add more if needed
-feature_cols = [col for col in df.columns if col not in exclude]
-
-```
-
-## Data Validation Checks
-
-```{python}
-
-# '''Correct Data File Format Check'''
-# data_path = "../data/raw/agaricus-lepiota.data"
-# correct_exts = {".csv",".data"}
-# ext = os.path.splitext(data_path)[1].lower()
-# assert ext in correct_exts, (
-#     f"[File format] '{data_path}' has extension '{ext}', "
-#     f"expected one of {sorted(correct_exts)}."
-# )
-
-# '''No Duplicate Observations Check'''
-# duplicates = df.duplicated().sum()
-# assert duplicates == 0, (
-#     f"Found {duplicates} full-row duplicates."
-# )
-
-
-```
-
 #### Relationship Between Physical Features and Toxicity: An Exploratory Overview
 To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. Odor showed the strongest separation between classes (Figure @fig-odor-cat), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (Figure @fig-gill-size), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (Figure @fig-habitat): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (Figure @fig-bruise), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (Figure @fig-pop-type), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.
 
@@ -697,7 +740,6 @@ To explore how individual mushroom characteristics relate to toxicity, we compar
 # Show strongly the feature predicts toxicity
 
 feature_scores = []
-feature_cols = list(X_train.columns) 
 
 for col in feature_cols:
     ct = get_poison_rate_by(col)
@@ -722,7 +764,6 @@ A ranking of features by their discriminatory power is shown in Table @tbl-poiso
 #| label: fig-corr-heatmap
 #| fig-cap: "Correlation heatmap (Cramér's V) for all feature and feature-target pairs in the training data."
 
-train_df = pd.concat([X_train, y_train], axis=1)
 # create list of all pairwise feature and feature-target combinations 
 train_df_cols = list(train_df.columns)
 pairs = list(itertools.combinations(train_df_cols, 2))
@@ -787,6 +828,7 @@ correlation_heatmap
 Before we continue, we must preprocess our data such that the features work with our models. Since all of our features are strings, we can opt to use one-hot encoding for them all. 
 
 ```{python}
+# Proprocessor
 preprocessor = OneHotEncoder(handle_unknown="ignore")
 
 ```
