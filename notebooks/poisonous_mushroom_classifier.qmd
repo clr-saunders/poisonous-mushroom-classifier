@@ -13,6 +13,8 @@ execute:
   cache: false
 ---
 
+# Imports
+*Never forget to run imports first.*
 
 ```{python}
 import requests
@@ -21,7 +23,7 @@ import pandas as pd
 import numpy as np
 import os
 import altair as alt
-import pandera as pa
+import pandera.pandas as pa
 alt.renderers.enable("png")
 
 from sklearn.preprocessing import OneHotEncoder
@@ -33,7 +35,8 @@ from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from scipy.stats import chi2_contingency
 import itertools
-from pandera import check
+from pathlib import Path
+
 ```
 
 # Summary
@@ -68,23 +71,44 @@ Each row includes 22 categorical variables that are physical characteristics of 
 
 ```{python}
 
-#adding the downloaded data to the data directory by code
-# download data as zip and extract
-url = "https://archive.ics.uci.edu/static/public/73/mushroom.zip"
+# Add the downloaded data to the data directory by code
+# Download data as zip and extract
+# With this report residing in one level below the project root (e.g., in reports/ or notebooks/)
+PROJECT_ROOT = Path("..").resolve()
+DATA_URL = "https://archive.ics.uci.edu/static/public/73/mushroom.zip"
 
-response = requests.get(url)
-with open("../data/raw/mushroom.zip", 'wb') as f:
-    f.write(response.content)
+DATA_DIR = PROJECT_ROOT / "data" / "raw"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-with zipfile.ZipFile("../data/raw/mushroom.zip", 'r') as zip_ref:
-    zip_ref.extractall("../data/raw")
+ZIP_PATH = DATA_DIR / "mushroom.zip"
+DATA_PATH = DATA_DIR / "agaricus-lepiota.data"
+
+```
+
+```{python}
+# Download only if the data file does not already exist
+print("working")
+if not DATA_PATH.exists():
+    print("[INFO] Data file not found. Downloading from UCI...")
+    response = requests.get(DATA_URL)
+    response.raise_for_status()
+    response = requests.get(DATA_URL)
+
+    with open(ZIP_PATH, 'wb') as f:
+        f.write(response.content)
+
+    with zipfile.ZipFile(ZIP_PATH, 'r') as zip_ref:
+        zip_ref.extractall(DATA_DIR)
+
+    print("[INFO] Download and extraction completed.")
+
+else:
+    print(f"[INFO] Using existing data file at: {DATA_PATH}")
 ```
 
 # Data cleaning and wrangling
 ```{python}
-#| label: tbl-sample-data
-#| tbl-cap: "First five rows of the dataset."
-
+# Expected data column names
 dataset_col_names = [
     "class", "cap_shape", "cap_surface", "cap_color", "bruises", "odor",
     "gill_attachment", "gill_spacing", "gill_size", "gill_color",
@@ -95,27 +119,56 @@ dataset_col_names = [
     "ring_number", "ring_type",
     "spore_print_color", "population", "habitat"
 ]
-
-df = pd.read_csv("../data/raw/agaricus-lepiota.data", names=dataset_col_names)
-
-# Data Validation Check: Target follows expected distribution
-actual_distribution = df['class'].value_counts(normalize=True).round(3).to_dict()
-# as per dataset documentation, expected proportions for each target
-expected_distribution = {'e': 0.518, 'p':0.482}
-for prop in expected_distribution:
-    assert np.isclose(actual_distribution[prop], expected_distribution[prop], atol=0.01), \
-        f"Class {k}: {actual_distribution[prop]} != {expected_distribution[prop]}"
-
-# Changing the target to numeric values: poisonous=1, edible=0
-df["is_poisonous"] = df["class"].map({"p": 1, "e": 0})
-
-# Drop rows with na in the target column
-df = df.dropna(subset=["is_poisonous"])
-df.head()
 ```
 
 ```{python}
-'''Correct category levels check (i.e., no string mismatches or single values)'''
+#| label: tbl-sample-data
+#| tbl-cap: "First five rows of the raw dataset."
+
+df = pd.read_csv(DATA_PATH, names=dataset_col_names)
+df.head()
+```
+
+A preview of the first five rows of the raw dataset is shown in Table @tbl-sample-data, which illustrates the categorical structure of all features prior to cleaning.
+
+```{python}
+
+# Data Validation Check: Target follows expected distribution
+actual_distribution = (
+    df["class"]
+    .value_counts(normalize=True)
+    .round(3)
+    .to_dict()
+)
+
+# As per dataset documentation, expected proportions for each target
+expected_distribution = {'e': 0.518, 'p':0.482}
+
+for cls, expected_prop in expected_distribution.items():
+    observed_prop = actual_distribution.get(cls, 0.0)
+    assert np.isclose(observed_prop, expected_prop, atol=0.01), (
+        f"Class '{cls}': observed proportion {observed_prop} "
+        f"differs from expected {expected_prop}."
+    )
+
+print(
+    "[OK] Target distribution matches expected proportions "
+    "(within tolerance)."
+)
+
+```
+
+```{python}
+# # Changing the target to numeric values: poisonous=1, edible=0
+# df["is_poisonous"] = df["class"].map({"p": 1, "e": 0})
+
+# # Drop rows with na in the target column
+# df = df.dropna(subset=["is_poisonous"])
+# df.head()
+```
+
+```{python}
+# Correct category levels check (i.e., no string mismatches or single values)
 allowed_values = {
     "class": ["e", "p"],
     "cap_shape": ["b", "c", "x", "f", "k", "s"],
@@ -141,35 +194,75 @@ allowed_values = {
     "population": ["a", "c", "n", "s", "v", "y"],
     "habitat": ["g", "l", "m", "p", "u", "w", "d"]
 }
-for col, allowed in allowed_values.items():
-    invalid = set(df[col].dropna().unique()) - set(allowed)
-    assert not invalid, f"{col} has invalid values: {invalid}"
+
 ```
 
-A preview of the first five rows of the raw dataset is shown in Table @tbl-sample-data, which illustrates the categorical structure of all features prior to cleaning.
+```{python}
 
+# Build a Pandera schema where each categorical column:
+# - is a string
+# - is restricted to its documented levels via Check.isin(...)
+category_schema = pa.DataFrameSchema(
+    {
+        col: pa.Column(
+            str,
+            Check.isin(allowed),
+            nullable=False,  # all values should be present at this stage
+        )
+        for col, allowed in allowed_values.items()
+    }
+)
+
+# Validate df against the schema
+category_schema.validate(df, lazy=True)
+
+print("[OK] All categorical columns contain only expected levels (Pandera validation).")
+```
 
 
 ```{python}
+# Basic missingness summary (raw data)
 df.isna().sum()
 
 ```
 
+
 ```{python}
-# Encode "missing" (?) as NA
-(df == '?').sum()
+# Encoded missingness via '?':
+(df == "?").sum()
 ```
 
 ```{python}
-# Drop stalk_root column due to missing values and original target column "class" because numeric column of target values "is_poisonous" added to replace it. 
+# Convert "?" markers to proper NaN in case any other should occur apart from the known `stalk_root`_ just thinking real-world applications
+
+df = df.replace("?", np.nan)
+
+```
+
+```{python}
+# Changing the target to numeric values: poisonous=1, edible=0
+
+df["is_poisonous"] = df["class"].map({"p": 1, "e": 0})
+```
+
+```{python}
+# Drop rows with NaN in the target column (none expected, but safe)
+
+df = df.dropna(subset=["is_poisonous"])
+```
+
+```{python}
+# Drop stalk_root column due to missing values and original target column "class" because numeric column of target values "is_poisonous" added to replace it
 df.drop(columns=['stalk_root', 'class'], inplace=True)
 
 ```
 
 ```{python}
+# Check remaining missing values
 df.isna().sum()
 
 ```
+
 
 
 # EDA Before Data Splitting 
