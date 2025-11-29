@@ -9,32 +9,24 @@ The dataset used was adapted from The Audubon Society Field Guide to North Ameri
 ## Report
 The final report can be found [here](notebooks/poisonous_mushroom_classifier.qmd)
 
+## Dependencies
+- Docker
+
 ## Usage
 First time running the project, run the following from the root of this repository:
 
 ```bash
-conda-lock install --name poisonous_mushroom_classifier conda-lock.yml
+docker compose run --service-ports --remove-orphans analysis-env
 ```
 
-Then, activate the environment:
+
+To run the analysis inside the container, run the following within:
 
 ```bash
-conda activate poisonous_mushroom_classifier
+quarto render docs/poisonous_mushroom_classifier.qmd
 ```
 
-To run the analysis, run the following from the root of this repository:
 
-```bash
-quarto render notebooks/poisonous_mushroom_classifier.qmd
-```
-
-## Dependencies
-- conda (version 23.9.0 or higher)
-- conda-lock (version 2.5.7 or higher)
-- jupyterlab (version 4.0.0 or higher)
-- nb_conda_kernels (version 2.3.1 or higher)
-- Quarto** (version 1.4.0 or higher)
-- Python and packages listed in environment.yml
 
 ## License
 The Poisonous Mushroom Classifier report and documentation contained herein are licensed under the **Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** License.  
