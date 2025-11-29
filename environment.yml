@@ -1,19 +1,22 @@
 name: poisonous_mushroom_classifier
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - scikit-learn=1.7.2
   - pandas=2.3.3
   - requests=2.32.5
-  - python=3.14.0
+  - python=3.13.9
   - altair=6.0.0
   - ipykernel=6.29.5
-  - vegafusion-python-embed=1.6.9
-  - vegafusion-jupyter=1.6.9
   - vl-convert-python=1.8.0
-  - vegafusion=2.0.3
   - notebook=6.5.7
   - jupyter_contrib_nbextensions=0.7.0
   - matplotlib=3.10.8
   - pandera=0.27.0
+  - conda=25.7.0
+platforms:
+  - linux-64
+  - osx-64
+  - win-64
+  - osx-arm64  
+  - linux-aarch64

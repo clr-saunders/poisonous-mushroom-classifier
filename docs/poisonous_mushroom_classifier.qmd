@@ -4,8 +4,8 @@ author: "Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders"
 date: "November 18, 2025"
 jupyter: python3
 format:
-    pdf: 
-        fig-align: left
+    html:
+      output-file: index.html
 execute:
   echo: true
   warning: false
