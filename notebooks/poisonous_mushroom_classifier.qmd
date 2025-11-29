@@ -69,6 +69,17 @@ Each row includes 22 categorical variables that are physical characteristics of 
 
 # Analysis
 
+```{python}
+#adding the downloaded data to the data directory by code
+# download data as zip and extract
+url = "https://archive.ics.uci.edu/static/public/73/mushroom.zip"
+response = requests.get(url)
+with open("../data/raw/mushroom.zip", 'wb') as f:
+    f.write(response.content)
+with zipfile.ZipFile("../data/raw/mushroom.zip", 'r') as zip_ref:
+    zip_ref.extractall("../data/raw")
+```
+
 ## Data Validation Checks
 
 ```{python}
@@ -80,11 +91,7 @@ assert ext in correct_exts, (
     f"[File format] '{data_path}' has extension '{ext}', "
     f"expected one of {sorted(correct_exts)}."
 )
-'''No Duplicate Observations Check'''
-duplicates = df.duplicated().sum()
-assert duplicates == 0, (
-    f"Found {duplicates} full-row duplicates."
-)
+
 '''All the features in this dataset are categorical, so we can't check numeric outliers. With respect to anomalous values, we confirmed earlier in the check for correct category levels that all categories only include the expected values.'''
 ```
 
@@ -108,7 +115,7 @@ dataset_col_names = [
 #| label: tbl-sample-data
 #| tbl-cap: "First five rows of the raw dataset."
 
-df = pd.read_csv(DATA_PATH, names=dataset_col_names)
+df = pd.read_csv(data_path, names=dataset_col_names)
 df.head()
 ```
 
@@ -117,19 +124,12 @@ A preview of the first five rows of the raw dataset is shown in Table @tbl-sampl
 ## Data Validation Checks
 
 ```{python}
-# Pandera Duplicate-Row Check (DataFrame-wide validation)
-duplicate_check_schema = pa.DataFrameSchema(
-    columns=None,
-    checks=[
-        pa.Check(
-            lambda df: ~df.duplicated().any(),
-            error="Duplicate rows found in the dataset."
-        )
-    ]
-)
+'''No Duplicate Observations Check'''
 
-duplicate_check_schema.validate(df, lazy=True)
-print("[OK] No duplicate rows found in the dataset (Pandera validation).")
+duplicates = df.duplicated().sum()
+assert duplicates == 0, (
+    f"Found {duplicates} full-row duplicates."
+)
 ```
 
 ```{python}
