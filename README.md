@@ -15,6 +15,8 @@ The final report can be found [here](notebooks/poisonous_mushroom_classifier.qmd
 ## Usage
 First time running the project, run the following from the root of this repository:
 
+Estimate time: 60-120s (Dependent on network speed, CPU and storage media)
+
 ```bash
 docker compose run --service-ports --remove-orphans analysis-env
 ```
