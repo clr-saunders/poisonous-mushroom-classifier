@@ -543,6 +543,13 @@ if "veil_type" in X_train.columns:
 
 ```
 
+```{python}
+    X_train.to_csv('data/processed/x_train.csv')
+    X_test.to_csv('data/processed/x_test.csv')
+    y_train.to_csv('data/processed/y_train.csv')
+    y_test.to_csv('data/processed/y_test.csv')
+```
+
 `veil_type` was dropped because it contains only a single category for all observations.
 A feature with no variation cannot help the model distinguish edible from poisonous mushrooms, provides no predictive signal, and only adds redundant columns after one-hot encoding. Therefore, it is removed to simplify the feature set and prevent unnecessary model complexity.
 
@@ -781,6 +788,13 @@ feature_importance_eda = pd.DataFrame(feature_scores).sort_values(
 feature_importance_eda.index = feature_importance_eda.index + 1
 feature_importance_eda
 
+```
+
+```{python}
+    X_train.to_csv('../data/processed/x_train.csv')
+    X_test.to_csv('../data/processed/x_test.csv')
+    y_train.to_csv('../data/processed/y_train.csv')
+    y_test.to_csv('../data/processed/y_test.csv')
 ```
 
 A ranking of features by their discriminatory power is shown in Table @tbl-poison-rank, using the variance in poisonous fraction across categories as an association measure.
