@@ -9,15 +9,23 @@ from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import click
 import os
-import altair as alt
+from matplotlib import pyplot as plt
 
 @click.command()
-@click.option('--x-training-data', type=str, help="Path to x-train")
-@click.option('--y-training-data', type=str, help="Path to y-train")
-@click.option('--x-test-data', type=str, help="Path to x-test")
-@click.option('--y-test-data', type=str, help="Path to y-test")
+@click.argument('x_train')
+@click.argument('y_train')
+@click.argument('x_test')
+@click.argument('y_test')
 
 def main(x_train, y_train, x_test, y_test):
+
+    x_train = pd.read_csv(x_train)
+    y_train = pd.read_csv(y_train)
+    y_train = y_train['is_poisonous']
+    x_test = pd.read_csv(x_test)
+    y_test = pd.read_csv(y_test)
+    y_test = y_test['is_poisonous']
+
     preprocessor = OneHotEncoder(handle_unknown="ignore")
 
     dc_pipe = make_pipeline(
@@ -48,8 +56,11 @@ def main(x_train, y_train, x_test, y_test):
     y_pred = svc_pipe.predict(x_test)
 
     cm = confusion_matrix(y_test, y_pred)
-    plot = ConfusionMatrixDisplay(cm).plot()
-    plot.save(os.path.join('../img/confusion_matrix.png', "cancer_choose_k.png"), scale_factor=2.0)
+
+    disp = ConfusionMatrixDisplay(cm)
+    disp.plot()
+
+    disp.figure_.savefig("img/confusion_matrix.png")
 
 
 if __name__ == '__main__':
