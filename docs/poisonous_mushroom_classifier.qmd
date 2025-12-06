@@ -1,15 +1,17 @@
 ---
 title: "Poisonous Mushroom Classification"
 author: "Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders"
-date: "November 18, 2025"
+date: "December 6, 2025"
 jupyter: python3
-format:
+format: 
     html:
-      output-file: index.html
-      toc: true
-      toc-depth: 2
-      number-sections: true
-      code-tools: false
+        toc: true
+        toc-depth: 2
+        toc-expand: true
+        fig-align: left 
+        number-sections: true
+        output-file: index.html
+        output-dir: docs
 bibliography: references.bib
 execute:
   echo: false
@@ -19,15 +21,13 @@ execute:
 ---
 
 ```{python}
-#| label: setup
-#| include: false
 import requests
 import zipfile
 import pandas as pd
 import numpy as np
 import os
 import altair as alt
-import pandera as pa
+import pandera.pandas as pa
 alt.renderers.enable("png")
 
 from sklearn.preprocessing import OneHotEncoder
@@ -37,10 +37,11 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 from scipy.stats import chi2_contingency
 import itertools
 from pathlib import Path
+from IPython.display import Markdown, display
+from tabulate import tabulate
 
 ```
 
@@ -56,10 +57,10 @@ We believe the model could be a powerful tool for preventing the misidentificati
 
 The *Agaricus* and *Lepiota* (Agaricaceae) family of mushrooms, includes many of the common gilled mushrooms found and cultivated in urban and suburban North America [@lincoff1981]. 
 The family includes the common cultivated mushroom (*Agaricus bisporus*), and some of the best edible mushrooms, but it also includes poisonous mushrooms and a few that are deadly [@lincoff1981]. 
-These mushrooms are sometimes found in forests, but many grow on lawns, in the compost, or along roadsides and grassy areas where they are readily accessible for human consumption (500). 
+These mushrooms are sometimes found in forests, but many grow on lawns, in the compost, or along roadsides and grassy areas where they are readily accessible for human consumption [@lincoff1981]. 
 Accurate assessment of the edibility of these mushrooms is extremely important prior to consumption, however there is no simple rule for determining whether any example is poisonous or edible [@lincoff1981]. 
 
-Here we ask if we can use a supervised machine learning algorithm to predict whether a given mushroom from the Agaricus and Lepiota family of mushrooms is edible or poisonous, based upon its physical characteristics. 
+Here we ask if we can use a supervised machine learning algorithm to predict whether a given mushroom from the Agaricus and Lepiota family of mushrooms is edible or poisonous, based upon it's physical characteristics. 
 Answering this question is important because mushroom poisonings are common and the greatest risk factor for mushroom poisoning is the misidentification of poisonous species as edible, in particular by amateur mushroom foragers and immigrants [@diaz2016].
 If made accessible to the public in North America, accurate prediction of mushrooms in this family could prevent poisoning and support the safe consumption of common edible mushrooms. 
 
@@ -72,17 +73,9 @@ It was sourced from the UCI Machine Learning Repository [@uci_mushroom], specifi
 It includes 8124 descriptions of hypothetical mushroom samples that correspond to 23 species of mushrooms in the Agaricus and Lepiota Family [@lincoff1981]. 
 Each row includes 22 categorical variables that are physical characteristics of the mushroom sample, including the odor, gill-spacing, gill-color, gill-size, population, habitat, etc, and is labelled as edible or poisonous. 
 
-## Computing Environment
-All analyses were performed in Python [@python] using pandas [@mckinney2010], NumPy [@numpy], and scikit-learn [@scikit-learn] for data processing and modeling.
-Data validation employed Pandera [@pandera], and visualizations were generated using Altair [@altair].
-The dataset was accessed via the UCI Machine Learning Repository [@uci_mushroom].
-This report was written and rendered using Quarto [@quarto] to ensure full reproducibility.
-
 # Analysis
 
 ```{python}
-#| label: download-data
-#| include: false
 #adding the downloaded data to the data directory by code
 # download data as zip and extract
 url = "https://archive.ics.uci.edu/static/public/73/mushroom.zip"
@@ -96,7 +89,6 @@ with zipfile.ZipFile("../data/raw/mushroom.zip", 'r') as zip_ref:
 ## Data Validation Checks
 
 ```{python}
-#| include: false
 '''Correct Data File Format Check'''
 data_path = "../data/raw/agaricus-lepiota.data"
 correct_exts = {".csv",".data"}
@@ -111,7 +103,6 @@ assert ext in correct_exts, (
 
 # Data cleaning and wrangling
 ```{python}
-#| include: false
 # Expected data column names
 dataset_col_names = [
     "class", "cap_shape", "cap_surface", "cap_color", "bruises", "odor",
@@ -133,12 +124,11 @@ df = pd.read_csv(data_path, names=dataset_col_names)
 df.head()
 ```
 
-A preview of the first five rows of the raw dataset is shown in Table @tbl-sample-data, which illustrates the categorical structure of all features prior to cleaning.
+A preview of the first five rows of the raw dataset is shown in @tbl-sample-data, which illustrates the categorical structure of all features prior to cleaning.
 
 ## Data Validation Checks
 
 ```{python}
-#| include: false
 '''No Duplicate Observations Check'''
 
 duplicates = df.duplicated().sum()
@@ -148,7 +138,7 @@ assert duplicates == 0, (
 ```
 
 ```{python}
-#| include: false
+
 '''Target follows expected distribution'''
 actual_distribution = (
     df["class"]
@@ -176,7 +166,6 @@ print(
 
 
 ```{python}
-#| include: false
 '''Correct category levels check (i.e., no string mismatches or single values)'''
 
 
@@ -269,7 +258,6 @@ for col, allowed in allowed_values.items():
 
 
 ```{python}
-#| include: false
 # Basic missingness summary (raw data)
 df.isna().sum()
 
@@ -277,13 +265,11 @@ df.isna().sum()
 
 
 ```{python}
-#| include: false
 # Encoded missingness via '?':
 (df == "?").sum()
 ```
 
 ```{python}
-#| include: false
 # Convert "?" markers to proper NaN in case any other should occur apart from the known `stalk_root`_ just thinking real-world applications
 
 df = df.replace("?", np.nan)
@@ -291,35 +277,30 @@ df = df.replace("?", np.nan)
 ```
 
 ```{python}
-#| include: false
 # Changing the target to numeric values: poisonous=1, edible=0
 
 df["is_poisonous"] = df["class"].map({"p": 1, "e": 0})
 ```
 
 ```{python}
-#| include: false
 # Drop rows with NaN in the target column (none expected, but safe)
 
 df = df.dropna(subset=["is_poisonous"])
 ```
 
 ```{python}
-#| include: false
 # Drop stalk_root column due to missing values and original target column "class" because numeric column of target values "is_poisonous" added to replace it
 df.drop(columns=['stalk_root', 'class'], inplace=True)
 
 ```
 
 ```{python}
-#| include: false
 # Check remaining missing values
 df.isna().sum()
 
 ```
 
 ```{python}
-#| include: false
 # Validate cleaned column names
 # Given that the dataset we read in for this model did not include headers, we assigned the names and hence encoded the correct column names initially upon read in. Here, I confirm the column names match expectations after dropping "stalk_root" and changing the name of "class" to "is_poisonous"
 expected_cols_cleaned = [
@@ -333,7 +314,6 @@ print("[OK] Cleaned column names validated.")
 ```
 
 ```{python}
-#| include: false
 # Pandera: validate cleaned dataframe schema
 #   - All feature columns are strings
 #   - Target column is integer and only takes values {0, 1}
@@ -374,7 +354,6 @@ We addressed this by validating every categorical column against the official li
 Since all observed category values matched their expected sets, we conclude that no anomalous values are present in this dataset.
 
 ```{python}
-#| include: false
 # Pandera: validate cleaned dataframe schema    
 # - Ensure there are no completely empty rows
 # - all columns must be present
@@ -435,25 +414,12 @@ df = mushroom_schema.validate(df, lazy=True)
 
 ```
 
-# EDA Before Data Splitting 
+# Basic EDA
 
 ```{python}
 #| label: tbl-sample-cleaned
 #| tbl-cap: "First five rows of the cleaned dataset."
 df.head()
-```
-
-```{python}
-#| include: false
-# Basic information
-df.info()
-
-```
-
-```{python}
-#| include: false
-# Data dimensions
-df.shape
 ```
 
 # Data Splitting 
@@ -462,40 +428,10 @@ We are trying to classify whether a mushroom is edible (0) or poisonous (1). Goi
 
 A random state of `123` will ensure reproducibility when ran by subsequent users.
 
-```{python}
-#| include: false
-# Train–test split at the row level
-#   - Keeps all columns together in each split
-#   - Stratify on the target to preserve class balance
-
-train_df, test_df = train_test_split(
-    df,
-    test_size=0.3,
-    random_state=123,
-    stratify=df["is_poisonous"],
-)
-
-print(
-    "Train df shape: ", train_df.shape,
-    "\nTest df shape: ", test_df.shape
-    )
-
-```
-
-```{python}
-#| include: false
-# Build X/y for model training and evaluation from splits
-X_train = train_df.drop(columns=["is_poisonous"])
-y_train = train_df["is_poisonous"]
-
-X_test = test_df.drop(columns=["is_poisonous"])
-y_test = test_df["is_poisonous"]
-```
 
 # EDA After Data Splitting 
 
-```{python}
-#| include: false
+<!-- ```{python}
 # Sanity check: class balance in the training data
 
 train_target_counts = train_df["is_poisonous"].value_counts()
@@ -506,10 +442,9 @@ print(train_target_counts.rename(index={0: "edible (0)", 1: "poisonous (1)"}))
 
 print("\nTraining set class proportions:")
 print(train_target_prop.rename(index={0: "edible (0)", 1: "poisonous (1)"}).round(3))
-```
+``` -->
 
-```{python}
-#| include: false
+<!-- ```{python}
 # Data Validation: check training target distribution roughly matches UCI proportions
 
 expected_dist = {"e": 0.518, "p": 0.482}
@@ -529,408 +464,117 @@ print(
     f"is close to expected ({expected_poisonous:.3f})."
 )
 
-```
-
-```{python}
-#| include: false
-# Feature column names
-feature_cols = X_train.columns
-```
+``` -->
 
 ```{python}
 #| label: tbl-feature-summary
 #| tbl-cap: "Summary of mushroom feature characteristics"
 
 # Key mushroom feature summary
-summary_rows = []
-for col in feature_cols:
-    if not col == 'is_poisonous':
-        vc = X_train[col].value_counts()
-        summary_rows.append({
-            "feature": col,
-            "n_categories": vc.shape[0],
-            "most_frequent_category": vc.index[0],
-            "most_frequent_count": int(vc.iloc[0])
-    })
-
-feature_summary = (
-    pd.DataFrame(summary_rows)
-    .sort_values("n_categories", ascending=False)
-    .reset_index(drop=True)    
-)
-
-feature_summary.index = feature_summary.index + 1
-feature_summary
-
+mushroom_feature_summary = pd.read_csv("../results/tables/feature_summary.csv")
+odor_strength = mushroom_feature_summary["feature"].iloc[2]
+Markdown(mushroom_feature_summary.to_markdown(index = False))
 ```
 
-We summarize all 21 categorical predictors in Table @tbl-feature-summary, which reports the number of levels and the dominant category for each feature. Given that veil_type only has one level, the values are the same for all observations so we drop that column. 
+We summarize all 21 categorical predictors in @tbl-feature-summary, which reports the number of levels and the dominant category for each feature. Given that `veil_type` only has one level, the values are the same for all observations so we drop that column. 
 
-```{python}
-#| include: false
-# Drop veil_type from the feature matrices used for modeling. If check added to prevent error if not present_ in case the cell is run multiple times
-if "veil_type" in X_train.columns:
-    X_train = X_train.drop(columns=["veil_type"])
-    X_test = X_test.drop(columns=["veil_type"])
-    
-    # Redefine feature columns
-    feature_cols = X_train.columns
-
-```
-
-```{python}
-#| include: false
-X_train.to_csv('../data/processed/x_train.csv', index=False)
-X_test.to_csv('../data/processed/x_test.csv', index=False)
-y_train.to_csv('../data/processed/y_train.csv', index=False)
-y_test.to_csv('../data/processed/y_test.csv', index=False)
-```
+<!-- ```{python}
+    X_train.to_csv('data/processed/x_train.csv')
+    X_test.to_csv('data/processed/x_test.csv')
+    y_train.to_csv('data/processed/y_train.csv')
+    y_test.to_csv('data/processed/y_test.csv')
+``` -->
 
 `veil_type` was dropped because it contains only a single category for all observations.
 A feature with no variation cannot help the model distinguish edible from poisonous mushrooms, provides no predictive signal, and only adds redundant columns after one-hot encoding. Therefore, it is removed to simplify the feature set and prevent unnecessary model complexity.
 
-```{python}
-#| include: false
-def get_poison_rate_by(feature: str) -> pd.DataFrame:
-  """
-  Compute the proportion of poisonous and edible mushrooms for each category
-  of a given feature.
 
-  Parameters
-  ----------
-  feature : str
-      The name of the categorical column in `df` for which the poison rates
-      should be calculated.
+::: {#fig-odor-cat width=80%}
 
-  Returns
-  -------
-  pandas.DataFrame
-      A DataFrame indexed by the feature's categories with two columns:
-      `edible_frac` and `poisonous_frac`, sorted in descending order of
-      `poisonous_frac`.
-  """
-  category_poisonous = pd.crosstab(train_df[feature], train_df['is_poisonous'], normalize='index')
+![](../results/figures/stacked_odor.png)
 
-  # By construction, column 0 = edible, 1 = poisonous
-  category_poisonous.columns = ['edible_frac', 'poisonous_frac']
-  return category_poisonous.sort_values('poisonous_frac', ascending=False)
+Class Proportions (edible vs poisonous) by Odor
+:::
 
-```
 
-```{python}
-#| include: false
-# Feature category maps
-odor_map = {
-    "a": "almond",
-    "c": "creosote",
-    "f": "foul",
-    "l": "anise",
-    "m": "musty",
-    "n": "none",
-    "p": "pungent",
-    "s": "spicy",
-    "y": "fishy",
-}
+::: {#fig-gill-size width=80%}
 
-habitat_map = {
-    "g": "grasses",
-    "l": "leaves",
-    "m": "meadows",
-    "p": "paths",
-    "u": "urban",
-    "w": "waste",
-    "d": "woods",
-}
+![](../results/figures/stacked_gill_size.png)
 
-gill_size_map = {
-    "b": "broad",
-    "n": "narrow",
-}
+Class Proportions (edible vs poisonous) by Gill Size
+:::
 
-bruises_map = {
-    "t": "bruises",
-    "f": "no bruises",
-}
 
-population_map = {
-    "a": "abundant",
-    "c": "clustered",
-    "n": "numerous",
-    "s": "scattered",
-    "v": "several",
-    "y": "solitary",
-}
+::: {#fig-habitat width=80%}
 
-ring_type_map = {
-    "c": "cobwebby",
-    "e": "evanescent",
-    "f": "flaring",
-    "l": "large",
-    "n": "none",
-    "p": "pendant",
-    "s": "sheathing",
-    "z": "zone",
-}
+![](../results/figures/stacked_habitat.png)
 
-```
+Class Proportions (edible vs poisonous) by Habitat
+:::
 
-```{python}
-#| include: false
-def stacked_poison_chart(
-    feature: str,
-    feature_label: str | None = None,
-    category_labels: dict[str, str] | None = None,
-):
-    """
-    Create a stacked bar chart showing edible vs poisonous fractions
-    for each category of a given feature.
 
-    Parameters
-    ----------
-    feature : str
-        Column name in df (e.g., "odor", "gill_size", "habitat").
-    feature_label : str, optional
-        Pretty label for axes / title. If None, derived from the column name.
-    category_labels : dict[str, str], optional
-        Optional mapping from raw category codes to human-readable labels.
-        For example, for odor: {"a": "almond", "n": "none", ...}.
-        If provided, these labels will be used on the y-axis and in tooltips.
+::: {#fig-bruise width=80%}
 
-    Returns
-    -------
-    alt.Chart
-        Altair chart object with stacked bars.
-    """
-    # Use a nicer label if not provided
-    if feature_label is None:
-        feature_label = feature.replace("_", " ").title()
+![](../results/figures/stacked_bruises.png)
 
-    # Table of edible / poisonous fractions by category
-    ct = get_poison_rate_by(feature).reset_index()
+Class Proportions (edible vs poisonous) by Bruises
+:::
 
-    # If a category label map is provided, add a display column
-    if category_labels is not None:
-        display_col = f"{feature}_label"
-        ct[display_col] = ct[feature].map(category_labels).fillna(ct[feature])
-    else:
-        display_col = feature  # use the raw feature values
 
-    # Long format for stacked bars
-    long_df = ct.melt(
-        id_vars=display_col,
-        value_vars=["edible_frac", "poisonous_frac"],
-        var_name="class",
-        value_name="fraction",
-    )
+::: {#fig-pop-type width=80%}
 
-    # Human-readable class labels for legend
-    long_df["class_label"] = long_df["class"].map(
-        {"edible_frac": "Edible", "poisonous_frac": "Poisonous"}
-    )
+![](../results/figures/stacked_population.png)
 
-    # Build stacked bar chart
-    chart = (
-        alt.Chart(long_df)
-        .mark_bar()
-        .encode(
-            y=alt.Y(f"{display_col}:N", title=feature_label, sort="-x"),
-            x=alt.X("fraction:Q", title="Fraction", axis=alt.Axis(format=".2f")),
-            color=alt.Color(
-                "class_label:N",
-                title="Mushroom class",
-                scale=alt.Scale(
-                    domain=["Edible", "Poisonous"],
-                    range=["#17BECF", "#7E1E9C"],
-                ),
-                legend=alt.Legend(title="Mushroom class"),
-            ),
-            tooltip=[
-                alt.Tooltip(f"{display_col}:N", title=feature_label),
-                alt.Tooltip("class_label:N", title="Class"),
-                alt.Tooltip("fraction:Q", title="Fraction", format=".2f"),
-            ],
-        )
-        .properties(
-            width=450,
-        )
-    )
-    return chart
+Class Proportions (edible vs poisonous) by Population Type
+:::
 
-```
-
-```{python}
-#| label: fig-odor-cat
-#| fig-cap: "Class Proportions (edible vs poisonous) by Odor"
-#| fig-width: 6
-#| fig-height: 4
-#| out-width: 75%
-#| fig-align: center
-
-# Visualize the edible vs poisonous class proportions for each odor category
-stacked_poison_chart("odor", "Odor Category", odor_map)
-
-```
-
-```{python}
-#| label: fig-gill-size
-#| fig-cap: "Class Proportions (edible vs poisonous) by Gill Size"
-#| fig-width: 6
-#| fig-height: 4
-#| out-width: 60%
-#| fig-align: center
-
-# Visualize the edible vs poisonous class proportions for each gill size
-stacked_poison_chart("gill_size", "Gill Size", gill_size_map)
-
-```
-
-```{python}
-#| label: fig-habitat
-#| fig-cap: "Class Proportions (edible vs poisonous) by Habitat"
-#| fig-width: 6
-#| fig-height: 4
-#| out-width: 60%
-#| fig-align: center
-
-# Visualize the edible vs poisonous class proportions for each habitat 
-stacked_poison_chart("habitat", "Habitat", habitat_map)
-
-```
-
-```{python}
-#| label: fig-bruise
-#| fig-cap: "Class Proportions (edible vs poisonous) by Bruises"
-#| fig-width: 6
-#| fig-height: 4
-#| out-width: 60%
-#| fig-align: center
-
-# Visualize the edible vs poisonous class proportions for each bruise category 
-stacked_poison_chart("bruises", "Bruises", bruises_map)
-
-```
-
-```{python}
-#| label: fig-pop-type
-#| fig-cap: "Class Proportions (edible vs poisonous) by Population Type"
-#| fig-width: 6
-#| fig-height: 4
-#| out-width: 60%
-#| fig-align: center
-
-# Visualize the edible vs poisonous class proportions for each population type 
-stacked_poison_chart("population", "Population", population_map)
-
-```
 
 #### Relationship Between Physical Features and Toxicity: An Exploratory Overview
-To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. Odor showed the strongest separation between classes (@fig-odor-cat), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (@fig-gill-size), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (@fig-habitat): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (@fig-bruise), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (@fig-pop-type), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.
+To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. `{python} odor_strength` showed the strongest separation between classes (@fig-odor-cat), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (@fig-gill-size), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (@fig-habitat): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (@fig-bruise), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (@fig-pop-type), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.
+
 
 ```{python}
 #| label: tbl-poison-rank
 #| tbl-cap: "Ranking of features by how well they distinguish poisonous mushrooms"
 
-# Compute the variance in poisonous fraction across the categories of each feature
-# Show strongly the feature predicts toxicity
-
-feature_scores = []
-
-for col in feature_cols:
-    ct = get_poison_rate_by(col)
-    score = ct['poisonous_frac'].var()
-    feature_scores.append({'feature': col, 'poison_variance': round(score, 2)})
-
-feature_importance_eda = pd.DataFrame(feature_scores).sort_values(
-    'poison_variance', ascending=False
-).reset_index(drop=True)
-
-feature_importance_eda.index = feature_importance_eda.index + 1
-feature_importance_eda
+poison_rank = pd.read_csv("../results/tables/feature_poison_variance_rank.csv")
+Markdown(poison_rank.to_markdown(index = False))
 
 ```
 
-```{python}
-#| include: false
-X_train.to_csv('../data/processed/x_train.csv')
-X_test.to_csv('../data/processed/x_test.csv')
-y_train.to_csv('../data/processed/y_train.csv')
-y_test.to_csv('../data/processed/y_test.csv')
-```
 
-A ranking of features by their discriminatory power is shown in Table @tbl-poison-rank, using the variance in poisonous fraction across categories as an association measure.
+
+<!-- ```{python}
+    X_train.to_csv('../data/processed/x_train.csv')
+    X_test.to_csv('../data/processed/x_test.csv')
+    y_train.to_csv('../data/processed/y_train.csv')
+    y_test.to_csv('../data/processed/y_test.csv')
+``` -->
+
+A ranking of features by their discriminatory power is shown in @tbl-poison-rank, using the variance in poisonous fraction across categories as an association measure.
 
 
 ## Data Validation Check: Any Anomalous Correlation Between Features and/or Target? 
 
-```{python}
-#| label: fig-corr-heatmap
-#| fig-cap: "Correlation heatmap (Cramér's V) for all feature and feature-target pairs in the training data."
 
-# create list of all pairwise feature and feature-target combinations 
-train_df_cols = list(train_df.columns)
-pairs = list(itertools.combinations(train_df_cols, 2))
+::: {#fig-corr-heatmap width=80%}
 
-# compute correlation for all feature pairs and feature-target pairs 
+![](../results/figures/cramers_v_heatmap.png)
 
-def cramers_v(df, feature1, feature2):
-    """ manually computes correlation for feature pairs from the pearsons chi-squared test statistic using cramers v formula"""
-
-    table = pd.crosstab(df[feature1], df[feature2])
-
-    #get chi squared test statistc
-    chi2, _, _, _ = chi2_contingency(table)
-
-    #normalize chi-squared test statistic 
-    n = table.sum().sum()
-    phi2 = chi2 / n
-    r, k = table.shape
-
-    # compute cramers v
-    return np.sqrt(phi2 / min(k-1, r-1))
-
-# create empty df with diagonal equal to 1
-cramers_matrix = pd.DataFrame(np.eye(len(train_df_cols)), columns=train_df_cols, index=train_df_cols) 
-
-for feature1, feature2 in pairs:
-    v = cramers_v(train_df, feature1, feature2)
-    cramers_matrix.loc[feature1, feature2] = v
-    cramers_matrix.loc[feature2, feature1] = v
-
-# convert matrix to long format for Altair visualization
-cramers_long = cramers_matrix.reset_index().melt(id_vars='index')
-cramers_long.columns = ['feature_1', 'feature_2', 'cramers_v']
-
-correlation_heatmap = alt.Chart(cramers_long).mark_rect().encode(
-    x=alt.X('feature_1:N', 
-        sort=feature_cols,
-        title='Feature 1'),
-    y=alt.Y('feature_2:N',
-         sort=feature_cols,
-         title="Feature 2"),
-    color=alt.Color('cramers_v:Q', 
-        scale=alt.Scale(domain=[0,1], scheme='purpleorange'),
-        title="Cramer's V"
-        )
-    ).properties(
-        width=300,
-        height=300
-       )
-
-correlation_heatmap
-```
+Correlation heatmap (Cramer's V) for all feature and feature-target pairs in the training data.
+:::
 
 ## Summary of Anomalous Correlation Between Features:
-@fig-corr-heatmap shows a high correlation between the feature gill_attachment and the three features stalk_color_above_ring, stalk_color_below_ring, and veil_color. I expect this is a feature of the dataset because it includes a high number of observations (5686 in our training data) and only 23 species, so there are many repeated instances of each species. If a particular species has fixed color and gill attachment characteristics than it is expected that we would find a high correlation between these features. It is not likely to be a sign of data leakage, but does suggest that there are weaknesses in the biological representativeness of the dataset. Therefore, the dataset may not be the strongest choice for generalizing predictions about the poisonousness of mushrooms across the full Agaricus and Lepiota (Agaricaceae) family, since it may not capture the true diversity and independence of these features found in nature.
+@fig-corr-heatmap shows a high correlation between the feature `gill_attachment` and the three features `stalk_color_above_ring`, `stalk_color_below_ring`, and `veil_color`. We expect this is a feature of the dataset because it includes a high number of observations (5686 in our training data) and only 23 species, so there are many repeated instances of each species. If a particular species has fixed color and gill attachment characteristics than it is expected that we would find a high correlation between these features. It is not likely to be a sign of data leakage, but does suggest that there are weaknesses in the biological representativeness of the dataset. Therefore, the dataset may not be the strongest choice for generalizing predictions about the poisonousness of mushrooms across the full Agaricus and Lepiota (Agaricaceae) family, since it may not capture the true diversity and independence of these features found in nature.
 
 ## Summary of Anomalous Correlation Between Feature "Odor" and Target: 
-@fig-corr-heatmap shows a high correlation between the feature "odor" and the target, and a moderately high correlation between "spore_print_color" and the target. However, the dataset we are using includes background information on the logical rules discovered by prior researchers Duch, Adamczak, and Grabczewski (1996), and they found that "odor" is often the first split for identifying poisonous mushrooms, and "spore_print_color" is often the second. Hence both of these features are expected to be strong predictors of the target and the seeming anomalous correlation is simply an accurate reflection of biological reality as captured by the dataset, and not likely to be a sign of data leakage in this case. 
+@fig-corr-heatmap shows a high correlation between the feature `odor` and the target, and a moderately high correlation between `spore_print_color` and the target. However, the dataset we are using includes background information on the logical rules discovered by prior researchers Duch, Adamczak, and Grabczewski [@datastudy], and they found that "odor" is often the first split for identifying poisonous mushrooms, and "spore_print_color" is often the second. Hence both of these features are expected to be strong predictors of the target and the seeming anomalous correlation is simply an accurate reflection of biological reality as captured by the dataset, and not likely to be a sign of data leakage in this case. 
 
 # Model 
 
 Before we continue, we must preprocess our data such that the features work with our models. Since all of our features are strings, we can opt to use one-hot encoding for them all. 
 
 ```{python}
-#| include: false
 # Proprocessor
 preprocessor = OneHotEncoder(handle_unknown="ignore")
 
@@ -958,7 +602,7 @@ cross_val_dc = pd.DataFrame(
 cross_val_dc
 ```
 
-In our classification problem, we opt to use `SVC` (Buitinck, L., Louppe, G., Blondel, M., Pedregosa,               Fabian, Mueller, A., Grisel, O., … Ga"el Varoquaux. (2013)) as our model of choice for its effective usage in this scenario. We do not have an extreme amount of data (< 10000 observations) on top of only being a binary classification task. 
+In our classification problem, we opt to use `SVC` [@svc] as our model of choice for its effective usage in this scenario. We do not have an extreme amount of data (< 10000 observations) on top of only being a binary classification task. 
 
 ```{python}
 #| label: tbl-cross-val-svc
@@ -983,10 +627,6 @@ cross_val_svc
 ```{python}
 #| label: fig-confusion-matrix-svc
 #| fig-cap: "Confusion matrix for the SVC classifier on the test set."
-##| fig-width: 6
-#| fig-height: 4
-#| out-width: 60%
-#| fig-align: center
 
 y_pred = svc_pipe.predict(X_test)
 
@@ -995,27 +635,16 @@ ConfusionMatrixDisplay(cm).plot()
 
 ```
 
-```{python}
-#| label: inline-vars
-#| include: false
-test_n = len(y_test)
-acc = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-
-```
-
-
 # Results & Discussion
 
-Our prediction model performed excellently on test data, with precision {{precision:.3f}} and recall {{recall:.3f}} and an overall accuracy of {{acc:.3f}}. The model classified all of the {{test_n}} mushroom examples correctly as poisonous or edible, with no error. Given that our model predicted perfectly, no optimization was required. As shown in Figure @fig-confusion-matrix-svc, the SVC correctly classified every mushroom in the test set, yielding no false positives or false negatives. Furthermore, the SVC model shows consistent performance across folds, as summarized in Table @tbl-cross-val-svc.
+Our prediction model performed excellently on test data, classifying all of the mushroom examples correctly as poisonous or edible, with no error. Given that our model predicted perfectly, no optimization was required. As shown in  @fig-confusion-matrix-svc, the SVC correctly classified every mushroom in the test set, yielding no false positives or false negatives. Furthermore, the SVC model shows consistent performance across folds, as summarized in @tbl-cross-val-svc.
 
-This performance is identical to the results published on the [UCI website](https://archive.ics.uci.edu/dataset/73/mushroom) from which the data was sourced (Mushroom). 
+This performance is identical to the results published on the [UCI website](https://archive.ics.uci.edu/dataset/73/mushroom) from which the data was sourced [@datasource]. 
 As shown in the confusion matrix, the model has a recall and precision of 1, due to no false positivies or negatives. 
 The model also shows robustness, with no difference in the accuracy of training and test scores, so it is promising that this model could be deployed effectively to protect mushroom consumers from eating poisonous mushrooms.That said, there are some practical concerns for public implementation, namely the model is fit on 20 different features that correspond to specific categorical physical characteristics of a mushroom, and thus accuracy requires accurate identification of physical characteristics.
 
 Hence, if an amateur mushroom enthusiast aimed to utilize the model to predict edibility but misidentified the physical characeristics of the mushroom they were attempting to classify, then the accuracy of the models predictions would be effectively moot as it would not be returning a prediction for the true foraged mushroom.
 One might consider creating a similar predictor with a smaller number of features to increase the practical efficacy of the model, though they would need to consider balancing the models accuracy with efficacy, because the risk of falsely predicting a mushroom as edible could be fatal. 
-It is also worth noting that the hypothetical mushroom observations in this model are based upon a book from [@lincoff1981], so it would be wise to consider whether the data could be updated to be sourced from a more recent source of mushroom science. 
+It is also worth noting that the hypothetical mushroom observations in this model are based upon a book from 1981 [@lincoff1981], so it would be wise to consider whether the data could be updated to be sourced from a more recent source of mushroom science. 
 
-
+# References 
