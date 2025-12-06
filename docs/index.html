@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -185,7 +150,7 @@ div.csl-indent {
 <h1 data-number="4"><span class="header-section-number">4</span> Methods</h1>
 <section id="data" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="data"><span class="header-section-number">4.1</span> Data</h2>
-<p>The data set used in this project includes hypothetical mushroom samples drawn from The Audubon Society Field Guide to North American Mushrooms by Gary Lincoff (1981, 500-525). It was sourced from the UCI Machine Learning Repository <span class="citation" data-cites="uci_mushroom">(<a href="#ref-uci_mushroom" role="doc-biblioref">Dua and Graff 2017</a>)</span>, specifically the file <em>agarius-lepiota.data</em>. It includes 8124 descriptions of hypothetical mushroom samples that correspond to 23 species of mushrooms in the Agaricus and Lepiota Family <span class="citation" data-cites="lincoff1981">(<a href="#ref-lincoff1981" role="doc-biblioref">Lincoff 1981</a>)</span>. Each row includes 22 categorical variables that are physical characteristics of the mushroom sample, including the odor, gill-spacing, gill-color, gill-size, population, habitat, etc, and is labelled as edible or poisonous.</p>
+<p>The data set used in this project includes hypothetical mushroom samples drawn from The Audubon Society Field Guide to North American Mushrooms by Gary Lincoff <span class="citation" data-cites="lincoff1981">(<a href="#ref-lincoff1981" role="doc-biblioref">Lincoff 1981</a>)</span>. It was sourced from the UCI Machine Learning Repository <span class="citation" data-cites="uci_mushroom">(<a href="#ref-uci_mushroom" role="doc-biblioref">Dua and Graff 2017</a>)</span>, specifically the file <em>agarius-lepiota.data</em>. It includes 8124 descriptions of hypothetical mushroom samples that correspond to 23 species of mushrooms in the Agaricus and Lepiota Family <span class="citation" data-cites="lincoff1981">(<a href="#ref-lincoff1981" role="doc-biblioref">Lincoff 1981</a>)</span>. Each row includes 22 categorical variables that are physical characteristics of the mushroom sample, including the odor, gill-spacing, gill-color, gill-size, population, habitat, etc, and is labelled as edible or poisonous.</p>
 </section>
 <section id="computing-environment" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="computing-environment"><span class="header-section-number">4.2</span> Computing Environment</h2>
@@ -200,681 +165,29 @@ div.csl-indent {
 </section>
 <section id="data-cleaning-and-wrangling" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Data cleaning and wrangling</h1>
-<div class="cell" data-execution_count="5">
-<div id="tbl-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="5">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: First five rows of the raw dataset.
-</figcaption>
-<div aria-describedby="tbl-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="5">
-<div>
-
-
-<table class="dataframe do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">class</th>
-<th data-quarto-table-cell-role="th">cap_shape</th>
-<th data-quarto-table-cell-role="th">cap_surface</th>
-<th data-quarto-table-cell-role="th">cap_color</th>
-<th data-quarto-table-cell-role="th">bruises</th>
-<th data-quarto-table-cell-role="th">odor</th>
-<th data-quarto-table-cell-role="th">gill_attachment</th>
-<th data-quarto-table-cell-role="th">gill_spacing</th>
-<th data-quarto-table-cell-role="th">gill_size</th>
-<th data-quarto-table-cell-role="th">gill_color</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">stalk_surface_below_ring</th>
-<th data-quarto-table-cell-role="th">stalk_color_above_ring</th>
-<th data-quarto-table-cell-role="th">stalk_color_below_ring</th>
-<th data-quarto-table-cell-role="th">veil_type</th>
-<th data-quarto-table-cell-role="th">veil_color</th>
-<th data-quarto-table-cell-role="th">ring_number</th>
-<th data-quarto-table-cell-role="th">ring_type</th>
-<th data-quarto-table-cell-role="th">spore_print_color</th>
-<th data-quarto-table-cell-role="th">population</th>
-<th data-quarto-table-cell-role="th">habitat</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>p</td>
-<td>x</td>
-<td>s</td>
-<td>n</td>
-<td>t</td>
-<td>p</td>
-<td>f</td>
-<td>c</td>
-<td>n</td>
-<td>k</td>
-<td>...</td>
-<td>s</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>k</td>
-<td>s</td>
-<td>u</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>e</td>
-<td>x</td>
-<td>s</td>
-<td>y</td>
-<td>t</td>
-<td>a</td>
-<td>f</td>
-<td>c</td>
-<td>b</td>
-<td>k</td>
-<td>...</td>
-<td>s</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>n</td>
-<td>n</td>
-<td>g</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>e</td>
-<td>b</td>
-<td>s</td>
-<td>w</td>
-<td>t</td>
-<td>l</td>
-<td>f</td>
-<td>c</td>
-<td>b</td>
-<td>n</td>
-<td>...</td>
-<td>s</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>n</td>
-<td>n</td>
-<td>m</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>p</td>
-<td>x</td>
-<td>y</td>
-<td>w</td>
-<td>t</td>
-<td>p</td>
-<td>f</td>
-<td>c</td>
-<td>n</td>
-<td>n</td>
-<td>...</td>
-<td>s</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>k</td>
-<td>s</td>
-<td>u</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>e</td>
-<td>x</td>
-<td>s</td>
-<td>g</td>
-<td>f</td>
-<td>n</td>
-<td>f</td>
-<td>w</td>
-<td>b</td>
-<td>k</td>
-<td>...</td>
-<td>s</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>e</td>
-<td>n</td>
-<td>a</td>
-<td>g</td>
-</tr>
-</tbody>
-</table>
-
-<p>5 rows × 23 columns</p>
-</div>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<p>A preview of the first five rows of the raw dataset is shown in Table <a href="#tbl-sample-data" class="quarto-xref">Table&nbsp;1</a>, which illustrates the categorical structure of all features prior to cleaning.</p>
+<p>A preview of the first five rows of the raw dataset is shown in Table <strong>?@tbl-sample-data</strong>, which illustrates the categorical structure of all features prior to cleaning.</p>
 <section id="data-validation-checks-1" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="data-validation-checks-1"><span class="header-section-number">6.1</span> Data Validation Checks</h2>
-<div id="bcdb1279" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-stdout">
-<pre><code>[OK] Target distribution matches expected proportions (within tolerance).</code></pre>
-</div>
-</div>
-<div id="cadb12f5" class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>class                       0
-cap_shape                   0
-cap_surface                 0
-cap_color                   0
-bruises                     0
-odor                        0
-gill_attachment             0
-gill_spacing                0
-gill_size                   0
-gill_color                  0
-stalk_shape                 0
-stalk_root                  0
-stalk_surface_above_ring    0
-stalk_surface_below_ring    0
-stalk_color_above_ring      0
-stalk_color_below_ring      0
-veil_type                   0
-veil_color                  0
-ring_number                 0
-ring_type                   0
-spore_print_color           0
-population                  0
-habitat                     0
-dtype: int64</code></pre>
-</div>
-</div>
-<div id="759a2a98" class="cell" data-execution_count="10">
-<div class="cell-output cell-output-display" data-execution_count="10">
-<pre><code>class                          0
-cap_shape                      0
-cap_surface                    0
-cap_color                      0
-bruises                        0
-odor                           0
-gill_attachment                0
-gill_spacing                   0
-gill_size                      0
-gill_color                     0
-stalk_shape                    0
-stalk_root                  2480
-stalk_surface_above_ring       0
-stalk_surface_below_ring       0
-stalk_color_above_ring         0
-stalk_color_below_ring         0
-veil_type                      0
-veil_color                     0
-ring_number                    0
-ring_type                      0
-spore_print_color              0
-population                     0
-habitat                        0
-dtype: int64</code></pre>
-</div>
-</div>
-<div id="cc72afcb" class="cell" data-execution_count="15">
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>cap_shape                   0
-cap_surface                 0
-cap_color                   0
-bruises                     0
-odor                        0
-gill_attachment             0
-gill_spacing                0
-gill_size                   0
-gill_color                  0
-stalk_shape                 0
-stalk_surface_above_ring    0
-stalk_surface_below_ring    0
-stalk_color_above_ring      0
-stalk_color_below_ring      0
-veil_type                   0
-veil_color                  0
-ring_number                 0
-ring_type                   0
-spore_print_color           0
-population                  0
-habitat                     0
-is_poisonous                0
-dtype: int64</code></pre>
-</div>
-</div>
-<div id="a6f6f4f3" class="cell" data-execution_count="16">
-<div class="cell-output cell-output-stdout">
-<pre><code>[OK] Cleaned column names validated.</code></pre>
-</div>
-</div>
-<div id="2e21066a" class="cell" data-execution_count="17">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[17]</span><span class="ansi-green-fg">, line 5</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Pandera: validate cleaned dataframe schema</span>
-<span class="ansi-green-fg">      2</span> <span style="font-style:italic;color:rgb(95,135,135)">#   - All feature columns are strings</span>
-<span class="ansi-green-fg">      3</span> <span style="font-style:italic;color:rgb(95,135,135)">#   - Target column is integer and only takes values {0, 1}</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">5</span> schema = <span class="ansi-yellow-bg">pa</span>.DataFrameSchema(
-<span class="ansi-green-fg">      6</span>     {
-<span class="ansi-green-fg">      7</span>         <span style="font-style:italic;color:rgb(95,135,135)"># All predictor/feature columns: stored as strings</span>
-<span class="ansi-green-fg">      8</span>         **{
-<span class="ansi-green-fg">      9</span>             col: pa.Column(<span style="color:rgb(0,135,0)">str</span>)
-<span class="ansi-green-fg">     10</span>             <span style="font-weight:bold;color:rgb(0,135,0)">for</span> col <span style="font-weight:bold;color:rgb(175,0,255)">in</span> expected_cols_cleaned
-<span class="ansi-green-fg">     11</span>             <span style="font-weight:bold;color:rgb(0,135,0)">if</span> col != <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>
-<span class="ansi-green-fg">     12</span>         },
-<span class="ansi-green-fg">     13</span>         <span style="font-style:italic;color:rgb(95,135,135)"># Target column: must be integer and in the set {0, 1}</span>
-<span class="ansi-green-fg">     14</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>: pa.Column(
-<span class="ansi-green-fg">     15</span>             <span style="color:rgb(0,135,0)">int</span>,
-<span class="ansi-green-fg">     16</span>             pa.Check.isin([<span class="ansi-green-fg">0</span>, <span class="ansi-green-fg">1</span>]),
-<span class="ansi-green-fg">     17</span>         ),
-<span class="ansi-green-fg">     18</span>     }
-<span class="ansi-green-fg">     19</span> )
-<span class="ansi-green-fg">     21</span> <span style="font-style:italic;color:rgb(95,135,135)"># Validate the cleaned dataframe against the schema</span>
-<span class="ansi-green-fg">     22</span> schema.validate(df, lazy=<span style="font-weight:bold;color:rgb(0,135,0)">True</span>)
-
-<span class="ansi-red-fg">NameError</span>: name 'pa' is not defined</pre>
-</div>
-</div>
-</div>
 <section id="interpretation-of-outlier-anomalous-value-checks" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="interpretation-of-outlier-anomalous-value-checks"><span class="header-section-number">6.1.1</span> Interpretation of Outlier / Anomalous Value Checks</h3>
 <p>All features in this dataset are categorical, so traditional numeric outlier checks (e.g., detecting extreme continuous values) do not apply. Instead, the relevant “anomalous values” for categorical data are unexpected or invalid category levels.</p>
 <p>We addressed this by validating every categorical column against the official list of allowed levels from the UCI dataset documentation. Since all observed category values matched their expected sets, we conclude that no anomalous values are present in this dataset.</p>
-<div id="3bbc7567" class="cell" data-execution_count="18">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[18]</span><span class="ansi-green-fg">, line 7</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Pandera: validate cleaned dataframe schema    </span>
-<span class="ansi-green-fg">      2</span> <span style="font-style:italic;color:rgb(95,135,135)"># - Ensure there are no completely empty rows</span>
-<span class="ansi-green-fg">      3</span> <span style="font-style:italic;color:rgb(95,135,135)"># - all columns must be present</span>
-<span class="ansi-green-fg">      4</span> <span style="font-style:italic;color:rgb(95,135,135)"># - enforces no missing in `is_poisonous`</span>
-<span class="ansi-green-fg">      5</span> <span style="font-style:italic;color:rgb(95,135,135)"># - enforces &lt;= 5% missingness in any other column</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">7</span> mushroom_schema = <span class="ansi-yellow-bg">pa</span>.DataFrameSchema(
-<span class="ansi-green-fg">      8</span>     {
-<span class="ansi-green-fg">      9</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">cap_shape</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     10</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">cap_surface</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     11</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">cap_color</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     12</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">bruises</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     13</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">odor</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     14</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">gill_attachment</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     15</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">gill_spacing</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     16</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">gill_size</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     17</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">gill_color</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     18</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">stalk_shape</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     19</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">stalk_surface_above_ring</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     20</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">stalk_surface_below_ring</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     21</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">stalk_color_above_ring</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     22</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">stalk_color_below_ring</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     23</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">veil_type</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     24</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">veil_color</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     25</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">ring_number</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     26</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">ring_type</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     27</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">spore_print_color</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     28</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">population</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     29</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">habitat</span><span class="ansi-yellow-fg">"</span>: pa.Column(<span style="color:rgb(0,135,0)">str</span>),
-<span class="ansi-green-fg">     30</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>: pa.Column(
-<span class="ansi-green-fg">     31</span>             <span style="color:rgb(0,135,0)">int</span>,
-<span class="ansi-green-fg">     32</span>             pa.Check(
-<span class="ansi-green-fg">     33</span>                 <span style="font-weight:bold;color:rgb(0,135,0)">lambda</span> s: s.isna().mean() == <span class="ansi-green-fg">0.0</span>,
-<span class="ansi-green-fg">     34</span>                 element_wise=<span style="font-weight:bold;color:rgb(0,135,0)">False</span>,
-<span class="ansi-green-fg">     35</span>                 error=<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Target </span><span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg"> contains missing values.</span><span class="ansi-yellow-fg">"</span>,
-<span class="ansi-green-fg">     36</span>             ),
-<span class="ansi-green-fg">     37</span>             nullable=<span style="font-weight:bold;color:rgb(0,135,0)">False</span>,
-<span class="ansi-green-fg">     38</span>         ),
-<span class="ansi-green-fg">     39</span>     },
-<span class="ansi-green-fg">     40</span>     checks=[
-<span class="ansi-green-fg">     41</span>         <span style="font-style:italic;color:rgb(95,135,135)"># No empty observations: no row where *all* columns are missing</span>
-<span class="ansi-green-fg">     42</span>         pa.Check(
-<span class="ansi-green-fg">     43</span>             <span style="font-weight:bold;color:rgb(0,135,0)">lambda</span> df: ~(df.isna().all(axis=<span class="ansi-green-fg">1</span>)).any(),
-<span class="ansi-green-fg">     44</span>             element_wise=<span style="font-weight:bold;color:rgb(0,135,0)">False</span>,
-<span class="ansi-green-fg">     45</span>             error=<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Empty rows found.</span><span class="ansi-yellow-fg">"</span>,
-<span class="ansi-green-fg">     46</span>         ),
-<span class="ansi-green-fg">     47</span>         <span style="font-style:italic;color:rgb(95,135,135)"># Missingness not beyond expected threshold (up to max 5% per column)</span>
-<span class="ansi-green-fg">     48</span>         pa.Check(
-<span class="ansi-green-fg">     49</span>             <span style="font-weight:bold;color:rgb(0,135,0)">lambda</span> df: df.isna().mean().max() &lt;= <span class="ansi-green-fg">0.05</span>,
-<span class="ansi-green-fg">     50</span>             element_wise=<span style="font-weight:bold;color:rgb(0,135,0)">False</span>,
-<span class="ansi-green-fg">     51</span>             error=<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">One or more columns exceed 5</span><span class="ansi-yellow-fg">%</span><span class="ansi-yellow-fg"> missingness.</span><span class="ansi-yellow-fg">"</span>,
-<span class="ansi-green-fg">     52</span>         ),
-<span class="ansi-green-fg">     53</span>     ],
-<span class="ansi-green-fg">     54</span> )
-<span class="ansi-green-fg">     56</span> <span style="font-style:italic;color:rgb(95,135,135)"># Validate the cleaned dataframe (will raise if check fails)</span>
-<span class="ansi-green-fg">     57</span> df = mushroom_schema.validate(df, lazy=<span style="font-weight:bold;color:rgb(0,135,0)">True</span>)
-
-<span class="ansi-red-fg">NameError</span>: name 'pa' is not defined</pre>
-</div>
-</div>
-</div>
 </section>
 </section>
 </section>
 <section id="eda-before-data-splitting" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> EDA Before Data Splitting</h1>
-<div class="cell" data-execution_count="19">
-<div id="tbl-sample-cleaned" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="19">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sample-cleaned-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: First five rows of the cleaned dataset.
-</figcaption>
-<div aria-describedby="tbl-sample-cleaned-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="19">
-<div>
-
-
-<table class="dataframe do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">cap_shape</th>
-<th data-quarto-table-cell-role="th">cap_surface</th>
-<th data-quarto-table-cell-role="th">cap_color</th>
-<th data-quarto-table-cell-role="th">bruises</th>
-<th data-quarto-table-cell-role="th">odor</th>
-<th data-quarto-table-cell-role="th">gill_attachment</th>
-<th data-quarto-table-cell-role="th">gill_spacing</th>
-<th data-quarto-table-cell-role="th">gill_size</th>
-<th data-quarto-table-cell-role="th">gill_color</th>
-<th data-quarto-table-cell-role="th">stalk_shape</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">stalk_color_above_ring</th>
-<th data-quarto-table-cell-role="th">stalk_color_below_ring</th>
-<th data-quarto-table-cell-role="th">veil_type</th>
-<th data-quarto-table-cell-role="th">veil_color</th>
-<th data-quarto-table-cell-role="th">ring_number</th>
-<th data-quarto-table-cell-role="th">ring_type</th>
-<th data-quarto-table-cell-role="th">spore_print_color</th>
-<th data-quarto-table-cell-role="th">population</th>
-<th data-quarto-table-cell-role="th">habitat</th>
-<th data-quarto-table-cell-role="th">is_poisonous</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>x</td>
-<td>s</td>
-<td>n</td>
-<td>t</td>
-<td>p</td>
-<td>f</td>
-<td>c</td>
-<td>n</td>
-<td>k</td>
-<td>e</td>
-<td>...</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>k</td>
-<td>s</td>
-<td>u</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>x</td>
-<td>s</td>
-<td>y</td>
-<td>t</td>
-<td>a</td>
-<td>f</td>
-<td>c</td>
-<td>b</td>
-<td>k</td>
-<td>e</td>
-<td>...</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>n</td>
-<td>n</td>
-<td>g</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>b</td>
-<td>s</td>
-<td>w</td>
-<td>t</td>
-<td>l</td>
-<td>f</td>
-<td>c</td>
-<td>b</td>
-<td>n</td>
-<td>e</td>
-<td>...</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>n</td>
-<td>n</td>
-<td>m</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>x</td>
-<td>y</td>
-<td>w</td>
-<td>t</td>
-<td>p</td>
-<td>f</td>
-<td>c</td>
-<td>n</td>
-<td>n</td>
-<td>e</td>
-<td>...</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>p</td>
-<td>k</td>
-<td>s</td>
-<td>u</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>x</td>
-<td>s</td>
-<td>g</td>
-<td>f</td>
-<td>n</td>
-<td>f</td>
-<td>w</td>
-<td>b</td>
-<td>k</td>
-<td>t</td>
-<td>...</td>
-<td>w</td>
-<td>w</td>
-<td>p</td>
-<td>w</td>
-<td>o</td>
-<td>e</td>
-<td>n</td>
-<td>a</td>
-<td>g</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-
-<p>5 rows × 22 columns</p>
-</div>
-</div>
-</div>
-</figure>
-</div>
-</div>
 </section>
 <section id="data-splitting" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> Data Splitting</h1>
 <p>We are trying to classify whether a mushroom is edible (0) or poisonous (1). Going to do a 70/30 train/test split due to the large and roughly equal proportions of edible and poisonous mushrooms.</p>
 <p>A random state of <code>123</code> will ensure reproducibility when ran by subsequent users.</p>
-<div id="c9cf004f" class="cell" data-execution_count="22">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[22]</span><span class="ansi-green-fg">, line 5</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Train–test split at the row level</span>
-<span class="ansi-green-fg">      2</span> <span style="font-style:italic;color:rgb(95,135,135)">#   - Keeps all columns together in each split</span>
-<span class="ansi-green-fg">      3</span> <span style="font-style:italic;color:rgb(95,135,135)">#   - Stratify on the target to preserve class balance</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">5</span> train_df, test_df = <span class="ansi-yellow-bg">train_test_split</span>(
-<span class="ansi-green-fg">      6</span>     df,
-<span class="ansi-green-fg">      7</span>     test_size=<span class="ansi-green-fg">0.3</span>,
-<span class="ansi-green-fg">      8</span>     random_state=<span class="ansi-green-fg">123</span>,
-<span class="ansi-green-fg">      9</span>     stratify=df[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>],
-<span class="ansi-green-fg">     10</span> )
-<span class="ansi-green-fg">     12</span> <span style="color:rgb(0,135,0)">print</span>(
-<span class="ansi-green-fg">     13</span>     <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Train df shape: </span><span class="ansi-yellow-fg">"</span>, train_df.shape,
-<span class="ansi-green-fg">     14</span>     <span class="ansi-yellow-fg">"</span><span style="font-weight:bold;color:rgb(175,95,0)">\n</span><span class="ansi-yellow-fg">Test df shape: </span><span class="ansi-yellow-fg">"</span>, test_df.shape
-<span class="ansi-green-fg">     15</span>     )
-
-<span class="ansi-red-fg">NameError</span>: name 'train_test_split' is not defined</pre>
-</div>
-</div>
-</div>
-<div id="a1b8f5ed" class="cell" data-execution_count="23">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[23]</span><span class="ansi-green-fg">, line 2</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Build X/y for model training and evaluation from splits</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">2</span> X_train = <span class="ansi-yellow-bg">train_df</span>.drop(columns=[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>])
-<span class="ansi-green-fg">      3</span> y_train = train_df[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>]
-<span class="ansi-green-fg">      5</span> X_test = test_df.drop(columns=[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>])
-
-<span class="ansi-red-fg">NameError</span>: name 'train_df' is not defined</pre>
-</div>
-</div>
-</div>
 </section>
 <section id="eda-after-data-splitting" class="level1" data-number="9">
 <h1 data-number="9"><span class="header-section-number">9</span> EDA After Data Splitting</h1>
-<div id="4c6eacb6" class="cell" data-execution_count="24">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[24]</span><span class="ansi-green-fg">, line 3</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Sanity check: class balance in the training data</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> train_target_counts = <span class="ansi-yellow-bg">train_df</span>[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>].value_counts()
-<span class="ansi-green-fg">      4</span> train_target_prop = train_df[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>].value_counts(normalize=<span style="font-weight:bold;color:rgb(0,135,0)">True</span>)
-<span class="ansi-green-fg">      6</span> <span style="color:rgb(0,135,0)">print</span>(<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Training set class counts:</span><span class="ansi-yellow-fg">"</span>)
-
-<span class="ansi-red-fg">NameError</span>: name 'train_df' is not defined</pre>
-</div>
-</div>
-</div>
-<div id="61b8f19f" class="cell" data-execution_count="25">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[25]</span><span class="ansi-green-fg">, line 7</span>
-<span class="ansi-green-fg">      4</span> <span style="font-style:italic;color:rgb(95,135,135)"># but now we’re working with numeric target: 0 = edible, 1 = poisonous</span>
-<span class="ansi-green-fg">      5</span> expected_poisonous = expected_dist[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">p</span><span class="ansi-yellow-fg">"</span>]  <span style="font-style:italic;color:rgb(95,135,135)"># 0.482</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">7</span> train_poisonous = <span class="ansi-yellow-bg">train_df</span>[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">"</span>].mean()
-<span class="ansi-green-fg">      8</span> tol = <span class="ansi-green-fg">0.02</span>
-<span class="ansi-green-fg">     10</span> <span style="font-weight:bold;color:rgb(0,135,0)">assert</span> <span style="color:rgb(0,135,0)">abs</span>(train_poisonous - expected_poisonous) &lt;= tol, (
-<span class="ansi-green-fg">     11</span>     <span class="ansi-yellow-fg">f</span><span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Training set poisonous proportion (</span><span style="font-weight:bold;color:rgb(175,95,135)">{</span>train_poisonous<span style="font-weight:bold;color:rgb(175,95,135)">:</span><span class="ansi-yellow-fg">.3f</span><span style="font-weight:bold;color:rgb(175,95,135)">}</span><span class="ansi-yellow-fg">) </span><span class="ansi-yellow-fg">"</span>
-<span class="ansi-green-fg">     12</span>     <span class="ansi-yellow-fg">f</span><span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">differs from expected (</span><span style="font-weight:bold;color:rgb(175,95,135)">{</span>expected_poisonous<span style="font-weight:bold;color:rgb(175,95,135)">:</span><span class="ansi-yellow-fg">.3f</span><span style="font-weight:bold;color:rgb(175,95,135)">}</span><span class="ansi-yellow-fg">) by more than </span><span style="font-weight:bold;color:rgb(175,95,135)">{</span>tol<span style="font-weight:bold;color:rgb(175,95,135)">:</span><span class="ansi-yellow-fg">.2f</span><span style="font-weight:bold;color:rgb(175,95,135)">}</span><span class="ansi-yellow-fg">.</span><span class="ansi-yellow-fg">"</span>
-<span class="ansi-green-fg">     13</span> )
-
-<span class="ansi-red-fg">NameError</span>: name 'train_df' is not defined</pre>
-</div>
-</div>
-</div>
-<div id="e19d650e" class="cell" data-execution_count="26">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[26]</span><span class="ansi-green-fg">, line 2</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Feature column names</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">2</span> feature_cols = <span class="ansi-yellow-bg">X_train</span>.columns
-
-<span class="ansi-red-fg">NameError</span>: name 'X_train' is not defined</pre>
-</div>
-</div>
-</div>
-<div id="tbl-feature-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="27">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-feature-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3: Summary of mushroom feature characteristics
-</figcaption>
-<div aria-describedby="tbl-feature-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[27]</span><span class="ansi-green-fg">, line 3</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Key mushroom feature summary</span>
-<span class="ansi-green-fg">      2</span> summary_rows = []
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> col <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">feature_cols</span>:
-<span class="ansi-green-fg">      4</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> col == <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">is_poisonous</span><span class="ansi-yellow-fg">'</span>:
-<span class="ansi-green-fg">      5</span>         vc = X_train[col].value_counts()
-
-<span class="ansi-red-fg">NameError</span>: name 'feature_cols' is not defined</pre>
-</div>
-</div>
-</div>
-</figure>
-</div>
-<p>We summarize all 21 categorical predictors in Table <a href="#tbl-feature-summary" class="quarto-xref">Table&nbsp;3</a>, which reports the number of levels and the dominant category for each feature. Given that veil_type only has one level, the values are the same for all observations so we drop that column.</p>
-<div id="b8242469" class="cell" data-execution_count="28">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[28]</span><span class="ansi-green-fg">, line 2</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Drop veil_type from the feature matrices used for modeling. If check added to prevent error if not present_ in case the cell is run multiple times</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">2</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">veil_type</span><span class="ansi-yellow-fg">"</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">X_train</span>.columns:
-<span class="ansi-green-fg">      3</span>     X_train = X_train.drop(columns=[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">veil_type</span><span class="ansi-yellow-fg">"</span>])
-<span class="ansi-green-fg">      4</span>     X_test = X_test.drop(columns=[<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">veil_type</span><span class="ansi-yellow-fg">"</span>])
-
-<span class="ansi-red-fg">NameError</span>: name 'X_train' is not defined</pre>
-</div>
-</div>
-</div>
+<p>We summarize all 21 categorical predictors in Table <strong>?@tbl-feature-summary</strong>, which reports the number of levels and the dominant category for each feature. Given that veil_type only has one level, the values are the same for all observations so we drop that column.</p>
 <p><code>veil_type</code> was dropped because it contains only a single category for all observations. A feature with no variation cannot help the model distinguish edible from poisonous mushrooms, provides no predictive signal, and only adds redundant columns after one-hot encoding. Therefore, it is removed to simplify the feature set and prevent unnecessary model complexity.</p>
-<div id="fig-odor-cat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="33" data-fig-height="4" data-fig-width="6">
+<div id="fig-odor-cat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-width="6" data-execution_count="33" data-fig-height="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-odor-cat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -912,7 +225,7 @@ Figure&nbsp;1
 </figcaption>
 </figure>
 </div>
-<div id="fig-gill-size" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="34" data-fig-height="4" data-fig-width="6">
+<div id="fig-gill-size" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-width="6" data-execution_count="34" data-fig-height="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gill-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -950,7 +263,7 @@ Figure&nbsp;2
 </figcaption>
 </figure>
 </div>
-<div id="fig-habitat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="35" data-fig-height="4" data-fig-width="6">
+<div id="fig-habitat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-width="6" data-execution_count="35" data-fig-height="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-habitat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -988,21 +301,16 @@ Figure&nbsp;3
 </figcaption>
 </figure>
 </div>
-<div id="fig-bruise" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="36">
+<div id="fig-bruise" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-width="6" data-execution_count="36" data-fig-height="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bruise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[36]</span><span class="ansi-green-fg">, line 7</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)">##| fig-width: 6</span>
-<span class="ansi-green-fg">      2</span> <span style="font-style:italic;color:rgb(95,135,135)">#| fig-height: 4</span>
-<span class="ansi-green-fg">      3</span> <span style="font-style:italic;color:rgb(95,135,135)">#| out-width: 60%</span>
-<span class="ansi-green-fg">      4</span> <span style="font-style:italic;color:rgb(95,135,135)">#| fig-align: center</span>
-<span class="ansi-green-fg">      5</span> 
-<span class="ansi-green-fg">      6</span> <span style="font-style:italic;color:rgb(95,135,135)"># Visualize the edible vs poisonous class proportions for each bruise category </span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">7</span> <span class="ansi-yellow-bg">stacked_poison_chart</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-fg ansi-yellow-bg">bruises</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-fg ansi-yellow-bg">Bruises</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">bruises_map</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[36]</span><span class="ansi-green-fg">, line 2</span>
+<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Visualize the edible vs poisonous class proportions for each bruise category </span>
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">2</span> <span class="ansi-yellow-bg">stacked_poison_chart</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-fg ansi-yellow-bg">bruises</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-fg ansi-yellow-bg">Bruises</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">bruises_map</span><span class="ansi-yellow-bg">)</span>
 
 <span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[32]</span><span class="ansi-green-fg">, line 31</span>, in <span class="ansi-cyan-fg">stacked_poison_chart</span><span class="ansi-blue-fg">(feature, feature_label, category_labels)</span>
 <span class="ansi-green-fg">     28</span>     feature_label = feature.replace(<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">_</span><span class="ansi-yellow-fg">"</span>, <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg"> </span><span class="ansi-yellow-fg">"</span>).title()
@@ -1031,7 +339,7 @@ Figure&nbsp;4
 </figcaption>
 </figure>
 </div>
-<div id="fig-pop-type" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="37" data-fig-height="4" data-fig-width="6">
+<div id="fig-pop-type" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-width="6" data-execution_count="37" data-fig-height="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pop-type-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -1071,11 +379,11 @@ Figure&nbsp;5
 </div>
 <section id="relationship-between-physical-features-and-toxicity-an-exploratory-overview" class="level4" data-number="9.0.0.1">
 <h4 data-number="9.0.0.1" class="anchored" data-anchor-id="relationship-between-physical-features-and-toxicity-an-exploratory-overview"><span class="header-section-number">9.0.0.1</span> Relationship Between Physical Features and Toxicity: An Exploratory Overview</h4>
-<p>To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. Odor showed the strongest separation between classes (Figure <a href="#fig-odor-cat" class="quarto-xref">Figure&nbsp;1</a>), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (Figure <a href="#fig-gill-size" class="quarto-xref">Figure&nbsp;2</a>), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (Figure <a href="#fig-habitat" class="quarto-xref">Figure&nbsp;3</a>): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (Figure <a href="#fig-bruise" class="quarto-xref">Figure&nbsp;4</a>), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (Figure <a href="#fig-pop-type" class="quarto-xref">Figure&nbsp;5</a>), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.</p>
+<p>To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. Odor showed the strongest separation between classes (<a href="#fig-odor-cat" class="quarto-xref">Figure&nbsp;1</a>), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (<a href="#fig-gill-size" class="quarto-xref">Figure&nbsp;2</a>), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (<a href="#fig-habitat" class="quarto-xref">Figure&nbsp;3</a>): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (<a href="#fig-bruise" class="quarto-xref">Figure&nbsp;4</a>), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (<a href="#fig-pop-type" class="quarto-xref">Figure&nbsp;5</a>), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.</p>
 <div id="tbl-poison-rank" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="38">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-poison-rank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4: Ranking of features by how well they distinguish poisonous mushrooms
+Table&nbsp;1: Ranking of features by how well they distinguish poisonous mushrooms
 </figcaption>
 <div aria-describedby="tbl-poison-rank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -1096,7 +404,7 @@ Table&nbsp;4: Ranking of features by how well they distinguish poisonous mushroo
 </div>
 </figure>
 </div>
-<p>A ranking of features by their discriminatory power is shown in Table <a href="#tbl-poison-rank" class="quarto-xref">Table&nbsp;4</a>, using the variance in poisonous fraction across categories as an association measure.</p>
+<p>A ranking of features by their discriminatory power is shown in Table <a href="#tbl-poison-rank" class="quarto-xref">Table&nbsp;1</a>, using the variance in poisonous fraction across categories as an association measure.</p>
 </section>
 <section id="data-validation-check-any-anomalous-correlation-between-features-andor-target" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="data-validation-check-any-anomalous-correlation-between-features-andor-target"><span class="header-section-number">9.1</span> Data Validation Check: Any Anomalous Correlation Between Features and/or Target?</h2>
@@ -1135,24 +443,11 @@ Figure&nbsp;6
 <section id="model" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> Model</h1>
 <p>Before we continue, we must preprocess our data such that the features work with our models. Since all of our features are strings, we can opt to use one-hot encoding for them all.</p>
-<div id="f8e60303" class="cell" data-execution_count="41">
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[41]</span><span class="ansi-green-fg">, line 2</span>
-<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Proprocessor</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">2</span> preprocessor = <span class="ansi-yellow-bg">OneHotEncoder</span>(handle_unknown=<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">ignore</span><span class="ansi-yellow-fg">"</span>)
-
-<span class="ansi-red-fg">NameError</span>: name 'OneHotEncoder' is not defined</pre>
-</div>
-</div>
-</div>
 <p>We fit a <code>DummyClassifier</code> to our data as a baseline to compare our actual model with. Random state used again for reproducibility.</p>
 <div id="tbl-cross-val-dc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="42">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cross-val-dc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5: Mean 10-Fold Cross-Validation Metrics for DummyClassifier Baseline
+Table&nbsp;2: Mean 10-Fold Cross-Validation Metrics for DummyClassifier Baseline
 </figcaption>
 <div aria-describedby="tbl-cross-val-dc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -1180,7 +475,7 @@ Table&nbsp;5: Mean 10-Fold Cross-Validation Metrics for DummyClassifier Baseline
 <div id="tbl-cross-val-svc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="43">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cross-val-svc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6: Mean 10-Fold Cross-Validation Metrics for SVC Model
+Table&nbsp;3: Mean 10-Fold Cross-Validation Metrics for SVC Model
 </figcaption>
 <div aria-describedby="tbl-cross-val-svc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-error">
@@ -1232,9 +527,9 @@ Figure&nbsp;7
 </section>
 <section id="results-discussion" class="level1" data-number="11">
 <h1 data-number="11"><span class="header-section-number">11</span> Results &amp; Discussion</h1>
-<p>Our prediction model performed excellently on test data, with precision <code class="sourceCode python">precision</code> and recall <code class="sourceCode python">recall</code> and an overall accuracy of <code class="sourceCode python">acc</code>. The model classified all of the <code class="sourceCode python">test_n</code> mushroom examples correctly as poisonous or edible, with no error. Given that our model predicted perfectly, no optimization was required. As shown in Figure <a href="#fig-confusion-matrix-svc" class="quarto-xref">Figure&nbsp;7</a>, the SVC correctly classified every mushroom in the test set, yielding no false positives or false negatives. Furthermore, the SVC model shows consistent performance across folds, as summarized in Table <a href="#tbl-cross-val-svc" class="quarto-xref">Table&nbsp;6</a>.</p>
+<p>Our prediction model performed excellently on test data, with precision {{precision:.3f}} and recall {{recall:.3f}} and an overall accuracy of {{acc:.3f}}. The model classified all of the {{test_n}} mushroom examples correctly as poisonous or edible, with no error. Given that our model predicted perfectly, no optimization was required. As shown in Figure <a href="#fig-confusion-matrix-svc" class="quarto-xref">Figure&nbsp;7</a>, the SVC correctly classified every mushroom in the test set, yielding no false positives or false negatives. Furthermore, the SVC model shows consistent performance across folds, as summarized in Table <a href="#tbl-cross-val-svc" class="quarto-xref">Table&nbsp;3</a>.</p>
 <p>This performance is identical to the results published on the <a href="https://archive.ics.uci.edu/dataset/73/mushroom">UCI website</a> from which the data was sourced (Mushroom). As shown in the confusion matrix, the model has a recall and precision of 1, due to no false positivies or negatives. The model also shows robustness, with no difference in the accuracy of training and test scores, so it is promising that this model could be deployed effectively to protect mushroom consumers from eating poisonous mushrooms.That said, there are some practical concerns for public implementation, namely the model is fit on 20 different features that correspond to specific categorical physical characteristics of a mushroom, and thus accuracy requires accurate identification of physical characteristics.</p>
-<p>Hence, if an amateur mushroom enthusiast aimed to utilize the model to predict edibility but misidentified the physical characeristics of the mushroom they were attempting to classify, then the accuracy of the models predictions would be effectively moot as it would not be returning a prediction for the true foraged mushroom. One might consider creating a similar predictor with a smaller number of features to increase the practical efficacy of the model, though they would need to consider balancing the models accuracy with efficacy, because the risk of falsely predicting a mushroom as edible could be fatal. It is also worth noting that the hypothetical mushroom observations in this model are based upon a book from 1981 (Lincoff), so it would be wise to consider whether the data could be updated to be sourced from a more recent source of mushroom science.</p>
+<p>Hence, if an amateur mushroom enthusiast aimed to utilize the model to predict edibility but misidentified the physical characeristics of the mushroom they were attempting to classify, then the accuracy of the models predictions would be effectively moot as it would not be returning a prediction for the true foraged mushroom. One might consider creating a similar predictor with a smaller number of features to increase the practical efficacy of the model, though they would need to consider balancing the models accuracy with efficacy, because the risk of falsely predicting a mushroom as edible could be fatal. It is also worth noting that the hypothetical mushroom observations in this model are based upon a book from <span class="citation" data-cites="lincoff1981">(<a href="#ref-lincoff1981" role="doc-biblioref">Lincoff 1981</a>)</span>, so it would be wise to consider whether the data could be updated to be sourced from a more recent source of mushroom science.</p>
 
 </section>
 

@@ -18,9 +18,6 @@ execute:
   cache: false
 ---
 
-# Imports
-*Never forget to run imports first.*
-
 ```{python}
 #| label: setup
 #| include: false
@@ -129,7 +126,6 @@ dataset_col_names = [
 ```
 
 ```{python}
-#| include: false
 #| label: tbl-sample-data
 #| tbl-cap: "First five rows of the raw dataset."
 
@@ -442,7 +438,6 @@ df = mushroom_schema.validate(df, lazy=True)
 # EDA Before Data Splitting 
 
 ```{python}
-#| include: false
 #| label: tbl-sample-cleaned
 #| tbl-cap: "First five rows of the cleaned dataset."
 df.head()
@@ -543,7 +538,6 @@ feature_cols = X_train.columns
 ```
 
 ```{python}
-#| include: false
 #| label: tbl-feature-summary
 #| tbl-cap: "Summary of mushroom feature characteristics"
 
