@@ -6,8 +6,13 @@ jupyter: python3
 format:
     html:
       output-file: index.html
+      toc: true
+      toc-depth: 2
+      number-sections: true
+      code-tools: false
+bibliography: references.bib
 execute:
-  echo: true
+  echo: false
   warning: false
   error: true
   cache: false
