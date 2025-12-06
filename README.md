@@ -40,13 +40,11 @@ The software code contained within this repository is licensed under the **MIT L
 See the [LICENSE](LICENSE) file for more information.
 
 ## References
+Lincoff, G. H. (1981).The Audubon Society Field Guide to North American Mushrooms (1981). New York: Alfred A. Knopf.
+
 Buitinck, L., Louppe, G., Blondel, M., Pedregosa,               Fabian, Mueller, A., Grisel, O., … Ga"el Varoquaux. (2013). API design for machine learning software: experiences from the scikit-learn              project. In ECML PKDD Workshop: Languages for Data Mining and Machine Learning (pp. 108–122).
 
-Diaz, J. H. (2016). Mistaken mushroom poisonings. Wilderness & Environmental Medicine, 27(2), 330-335
-
-Lincoff, G. H. (1981).The Audubon Society Field Guide to North American Mushrooms (1981). New York: Alfred A. Knopf
-
-Mushroom. (1981). UCI Machine Learning Repository. https://doi.org/10.24432/C5959T
+Mushroom. (1981). UCI Machine Learning Repository. https://doi.org/10.24432/C5959T.
 
 
 
