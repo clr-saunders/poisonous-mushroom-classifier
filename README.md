@@ -27,20 +27,36 @@ If you are using Windows or Mac, make sure Docker Desktop is running.
 ```bash
 docker compose run --service-ports --remove-orphans analysis-env
 ```
-2. In the terminal, look for a URL that starts with http://127.0.0.1:8888/lab?token=... (for an example, see the highlighted text in the terminal below). Copy and paste that URL into your browser. This will open Jupyter Lab inside the Docker container.
+2. In the terminal, look for a URL that starts with `http://127.0.0.1:8888/lab?token=...`. Copy and paste that URL into your browser. This will open Jupyter Lab inside the Docker container.
 
-3. To run the full analysis and render the report, open a terminal inside Jupyter Lab and run:
-
-```bash
-quarto render docs/poisonous_mushroom_classifier.qmd
-```
-
-This command will reproduce the full analysis and generate the report file:
+3. To run the analysis, open a terminal and run the following commands:
 
 ```bash
-docs/index.html
+python scripts/download_data.py \
+    --url="https://archive.ics.uci.edu/static/public/73/mushroom.zip" \
+    --write-to=data/raw
+
+python scripts/split_data.py \
+ --raw_data=data/raw/agaricus-lepiota.data \
+  --processed_path=data/processed \
+  --seed=522
+
+python scripts/eda.py \
+  --train_data=data/processed/x_train.csv \
+  --output_path=results/figures
+
+python scripts/model.py \
+  --train_data=data/processed/x_train.csv \
+  --model_output=results/models/svc_model.pkl
+
+python scripts/evaluate_model.py \
+  --test_data=data/processed/x_test.csv \
+  --model_input=results/models/svc_model.pkl \
+  --results_output=results/tables/metrics.csv
+
+quarto render docs/poisonous_mushroom_classifier.qmd --to html
 ```
-You can then view the rendered report in your browser by opening docs/index.html.
+This will generate the final report at `docs/index.html`.
 
 # Clean up
 1. To shut down the container and clean up the resources, type `Cntrl + C` in the terminal where you launched the container, and then type `docker compose rm`
