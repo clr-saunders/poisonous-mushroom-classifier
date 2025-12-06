@@ -486,10 +486,9 @@ odor_strength = mushroom_feature_summary["feature"].iloc[2]
 Markdown(mushroom_feature_summary.to_markdown(index = False))
 
 col_drop = pd.read_csv("../data/processed/columns_to_drop.csv")
-veil_type = col_drop["feature"].iloc[1]
 ```
 
-We summarize all 21 categorical predictors in @tbl-feature-summary, which reports the number of levels and the dominant category for each feature. Given that `{python} veil_type` only has one level, the values are the same for all observations so we drop that column. 
+We summarize all 21 categorical predictors in @tbl-feature-summary, which reports the number of levels and the dominant category for each feature. Given that `veil_type` only has one level, the values are the same for all observations so we drop that column. 
 
 <!-- ```{python}
     X_train.to_csv('data/processed/x_train.csv')
@@ -498,7 +497,7 @@ We summarize all 21 categorical predictors in @tbl-feature-summary, which report
     y_test.to_csv('data/processed/y_test.csv')
 ``` -->
 
-`{python} veil_type` was dropped because it contains only a single category for all observations.
+`veil_type` was dropped because it contains only a single category for all observations.
 A feature with no variation cannot help the model distinguish edible from poisonous mushrooms, provides no predictive signal, and only adds redundant columns after one-hot encoding. Therefore, it is removed to simplify the feature set and prevent unnecessary model complexity.
 
 
@@ -555,6 +554,9 @@ Markdown(poison_rank.to_markdown(index = False))
 
 ```
 
+
+#### Relationship Between Physical Features and Toxicity: An Exploratory Overview
+To explore how individual mushroom characteristics relate to toxicity, we compared the proportion of poisonous and edible mushrooms across several categorical features. `python {{ odor_strength }}` showed the strongest separation between classes (Figure @fig-odor-cat), with foul-, creosote-, and pungent-smelling mushrooms being almost exclusively poisonous, whereas almond and anise odors were strongly associated with edibility. Gill size also demonstrated a meaningful distinction (Figure @fig-gill-size), with broad gills far more common among edible mushrooms. Habitat exhibited notable patterns as well (Figure @fig-habitat): mushrooms found in wooded or grassy environments were more frequently poisonous, while those growing in urban or path environments tended to be edible. Bruising was another strong indicator (Figure @fig-bruise), as mushrooms that bruised were overwhelmingly edible, whereas those that did not bruise were frequently poisonous. Lastly, population type revealed clear group-level differences (Figure @fig-pop-type), with solitary or scattered mushrooms more often poisonous, while abundant or clustered populations were more commonly edible. Together, these figures illustrate that several features, odor in particular, provide strong discriminatory signals relevant to the classification task.
 
 
 
