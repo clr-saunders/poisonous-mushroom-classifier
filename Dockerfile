@@ -6,6 +6,7 @@ USER root
 
 RUN sudo -S \
     apt-get update && apt-get install -y \
+    make \
     gdebi
 
 RUN mamba update -y mamba \
@@ -17,3 +18,5 @@ RUN mamba update -y mamba \
 ARG QUARTO_VERSION="1.7.33"
 RUN curl -o quarto-linux-amd64.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
 RUN gdebi --non-interactive quarto-linux-amd64.deb
+
+USER ${NB_UID}
