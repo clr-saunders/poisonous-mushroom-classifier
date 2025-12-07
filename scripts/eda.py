@@ -338,14 +338,14 @@ def compute_and_save_poison_variance_rank(train_df: pd.DataFrame) -> pd.DataFram
     return feature_importance_eda
 
 
-# def cramers_v(df: pd.DataFrame, feature1: str, feature2: str) -> float:
-#     """Compute Cramér's V between two categorical features."""
-#     table = pd.crosstab(df[feature1], df[feature2])
-#     chi2, _, _, _ = chi2_contingency(table)
-#     n = table.sum().sum()
-#     phi2 = chi2 / n
-#     r, k = table.shape
-#     return float(np.sqrt(phi2 / min(k - 1, r - 1)))
+def cramers_v(df: pd.DataFrame, feature1: str, feature2: str) -> float:
+    """Compute Cramér's V between two categorical features."""
+    table = pd.crosstab(df[feature1], df[feature2])
+    chi2, _, _, _ = chi2_contingency(table)
+    n = table.sum().sum()
+    phi2 = chi2 / n
+    r, k = table.shape
+    return float(np.sqrt(phi2 / min(k - 1, r - 1)))
 
 
 # def compute_and_save_cramers_matrix(train_df: pd.DataFrame) -> None:
