@@ -19,13 +19,13 @@ The final report can be found [here](docs/poisonous_mushroom_classifier.qmd)
 
 ## Usage
 
-# Setup
+### Setup
 
 Make sure Docker Desktop is running.
 
 1. Clone this GitHub repository.
 
-# Running the analysis
+### Running the analysis
 
 1. Navigate to the root of this project on your computer using the command line and enter the following command:
 
@@ -49,18 +49,18 @@ make all
 
 This will generate the final report at `docs/index.html`.
 
-# Clean up
+### Clean up
 
 1. To shut down the container and clean up the resources, type `Ctrl + D` in the terminal where you launched the container
 
 ## Developer notes
 
-# Developer dependencies
+### Developer dependencies
 
 - `conda` (version 23.9.0 or higher)
 - `conda-lock` (version 2.5.7 or higher)
 
-# Adding a new dependency
+### Adding a new dependency
 
 To add a new Python or system dependency:
 
