@@ -10,21 +10,21 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import click
 import os
 from matplotlib import pyplot as plt
+import pickle
 
 @click.command()
-@click.argument('x_train')
-@click.argument('y_train')
-@click.argument('x_test')
-@click.argument('y_test')
+@click.argument('train_df')
+@click.argument('test_df')
 
-def main(x_train, y_train, x_test, y_test):
+def main(train_df, test_df):
 
-    x_train = pd.read_csv(x_train)
-    y_train = pd.read_csv(y_train)
-    y_train = y_train['is_poisonous']
-    x_test = pd.read_csv(x_test)
-    y_test = pd.read_csv(y_test)
-    y_test = y_test['is_poisonous']
+    train_df = pd.read_csv(train_df)
+    test_df = pd.read_csv(test_df)
+
+    x_train = train_df.drop('is_poisonous', axis=1)
+    y_train = train_df['is_poisonous']
+    x_test = test_df.drop('is_poisonous', axis=1)
+    y_test = test_df['is_poisonous']
 
     preprocessor = OneHotEncoder(handle_unknown="ignore")
 
@@ -33,7 +33,12 @@ def main(x_train, y_train, x_test, y_test):
         DummyClassifier(random_state=123)
     )
 
+    os.makedirs('scripts/models', exist_ok=True)
+
     dc_pipe.fit(x_train, y_train)
+
+    with open('scripts/models/dummy.pkl', 'wb')  as f:
+        pickle.dump(dc_pipe, f)
 
     cross_val_dc = pd.DataFrame(
         cross_validate(
@@ -46,6 +51,9 @@ def main(x_train, y_train, x_test, y_test):
     )
 
     svc_pipe.fit(x_train, y_train)
+
+    with open('scripts/models/svc.pkl', 'wb')  as f:
+        pickle.dump(svc_pipe, f)
 
     cross_val_svc = pd.DataFrame(
         cross_validate(
@@ -61,7 +69,19 @@ def main(x_train, y_train, x_test, y_test):
     disp.plot()
 
     disp.figure_.savefig("img/confusion_matrix.png")
+    
+    TP = cm[1, 1]
+    TN = cm[0, 0]
+    FP = cm[0, 1]
+    FN = cm[1, 0]
 
+    precision = TP / (FP + TP) if (FP + TP) > 0 else 0
+    recall    = TP / (FN + TP) if (FN + TP) > 0 else 0
+    accuracy  = (TP + TN) / (TP + TN + FP + FN)
+
+    scores_df = pd.DataFrame([{"precision": precision, "recall": recall, "accuracy": accuracy}])
+    os.makedirs("results/tables", exist_ok=True)
+    scores_df.to_csv("results/tables/test_scores.csv", index=False)
 
 if __name__ == '__main__':
     main()
