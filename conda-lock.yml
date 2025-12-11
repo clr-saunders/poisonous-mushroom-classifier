@@ -13,20 +13,20 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: 3f65673ed5e2e45b30f67c2fc530dffe9aa2810fe71ad4527134e141344c0d89
-    osx-64: 92572ecc132d6ee6ae3f1facf65fe16cab4db80dd90dac6fb3a6d1005acd3d6a
-    win-64: a2c4159490a584d4f4a07013be33c548960948a958637e030352ac890aaab886
-    osx-arm64: 6f90ef60fc29b18e0792417b0a3543db379e91a13e7fc9ea7c408c2c428228ec
-    linux-aarch64: 9ed85abb70d148ef358bb86dfb98af1129a9c85b4681cc489271c70ff18cf1d6
+    linux-64: b69f823661756b2af32d9129b51def3ef4bd11de901af8c494de25e0ec6f6917
+    osx-64: 11b1e4db18eb7d7bf9fd546f0fd8348217380f39795bdb6d6a10060817a28beb
+    win-64: 6b1170f3c9896e0c3a3e5c7487a23a24b404ca771423ce2ae06d29a5ee39185a
+    osx-arm64: ff413635d96150bb260ede9c44bcf3e57a017f3bbd6e6cbb7768fb75ff151ad7
+    linux-aarch64: 715396d204fba0392be3fa226165d5e7e213634af264fc025ffe9e1ca546b5e7
   channels:
   - url: conda-forge
     used_env_vars: []
   platforms:
   - linux-64
-  - osx-64
-  - win-64
-  - osx-arm64
   - linux-aarch64
+  - osx-64
+  - osx-arm64
+  - win-64
   sources:
   - environment.yml
 package:
@@ -17297,7 +17297,7 @@ package:
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: linux-64
   dependencies:
@@ -17305,56 +17305,56 @@ package:
     libgcc: '>=14'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.2-py313h07c4f96_2.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.3-py313h07c4f96_0.conda
   hash:
-    md5: 7824f18e343d1f846dcde7b23c9bf31a
-    sha256: 8ef12814ebf787553b351c919d40a599e2331aefec639aef5ce6117cbcfc6a28
+    md5: 82da2dcf1ea3e298f2557b50459809e0
+    sha256: 6006d4e5a6ff99be052c939e43adee844a38f2dc148f44a7c11aa0011fd3d811
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: linux-aarch64
   dependencies:
     libgcc: '>=14'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-aarch64/tornado-6.5.2-py313he149459_2.conda
+  url: https://conda.anaconda.org/conda-forge/linux-aarch64/tornado-6.5.3-py313he149459_0.conda
   hash:
-    md5: c65d1b77882defa5b721b18fd89cabdf
-    sha256: 116456ab58c415ba1a7825b4314f6fc76d30e9a0a197fb9170d69129b78d0184
+    md5: 236667bf319279d8d0a9581ebb4337f0
+    sha256: 06e69d338c1724a1340dc374c758fb75c36b069caa5a1994fbf461ae2d42e4fd
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: osx-64
   dependencies:
     __osx: '>=10.13'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/osx-64/tornado-6.5.2-py313hf050af9_2.conda
+  url: https://conda.anaconda.org/conda-forge/osx-64/tornado-6.5.3-py313hf050af9_0.conda
   hash:
-    md5: b3269a8a3f36be79609e87a9699153b4
-    sha256: df2904c26237af8e3edcc84ce495465cdd82e23c0a7e100a401ce9caebef6e50
+    md5: c7f818e0a06ce2567862e25c434d6a12
+    sha256: 48054a1b48268726280414b40d6ec25bf8277dac8c07492c98e795939835f257
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: osx-arm64
   dependencies:
     __osx: '>=11.0'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/tornado-6.5.2-py313h6535dbc_2.conda
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/tornado-6.5.3-py313h6535dbc_0.conda
   hash:
-    md5: c7fea1e31871009ff882a327ba4b7d9a
-    sha256: 621bcd6a7ca399bb739aa32a2fb639b2389dd5f030af3c7a2d5e639cfe194be4
+    md5: 03f256c8082d66b7551da5230ca6beac
+    sha256: 73e94ff2013323ac55026f4c510a1b6f3cafe2598f464d948362e23654d2bf5d
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: win-64
   dependencies:
@@ -17363,10 +17363,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.3,<15'
     vc14_runtime: '>=14.44.35208'
-  url: https://conda.anaconda.org/conda-forge/win-64/tornado-6.5.2-py313h5ea7bf4_2.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/tornado-6.5.3-py313h5ea7bf4_0.conda
   hash:
-    md5: 81bf54645cb6686c47158450cd913ec2
-    sha256: 79a13678078dbdcb800b75d32e7d60f460a2284f1d6ede15ff5478b656608a28
+    md5: dc03cc3533d0fb2c99ddec433feafaf5
+    sha256: 84517475d3afff9d5c8851c9861285345c128877db2d99bb47b86844c279f4ce
   category: main
   optional: false
 - name: tqdm
@@ -19728,5 +19728,60 @@ package:
   hash:
     md5: 053b84beec00b71ea8ff7a4f84b55207
     sha256: 368d8628424966fd8f9c8018326a9c779e06913dd39e646cf331226acc90e5b2
+  category: main
+  optional: false
+- name: pytest-mock
+  version: 3.15.1
+  manager: pip
+  platform: linux-64
+  dependencies:
+    pytest: '>=6.2.5'
+  url: https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl
+  hash:
+    sha256: 0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d
+  category: main
+  optional: false
+- name: pytest-mock
+  version: 3.15.1
+  manager: pip
+  platform: linux-aarch64
+  dependencies:
+    pytest: '>=6.2.5'
+  url: https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl
+  hash:
+    sha256: 0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d
+  category: main
+  optional: false
+- name: pytest-mock
+  version: 3.15.1
+  manager: pip
+  platform: osx-64
+  dependencies:
+    pytest: '>=6.2.5'
+  url: https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl
+  hash:
+    sha256: 0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d
+  category: main
+  optional: false
+- name: pytest-mock
+  version: 3.15.1
+  manager: pip
+  platform: osx-arm64
+  dependencies:
+    pytest: '>=6.2.5'
+  url: https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl
+  hash:
+    sha256: 0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d
+  category: main
+  optional: false
+- name: pytest-mock
+  version: 3.15.1
+  manager: pip
+  platform: win-64
+  dependencies:
+    pytest: '>=6.2.5'
+  url: https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl
+  hash:
+    sha256: 0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d
   category: main
   optional: false
