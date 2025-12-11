@@ -4,6 +4,9 @@ import pandas as pd
 import pandera.pandas as pa
 from pathlib import Path
 from sklearn.model_selection import train_test_split
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.write_csv import write_csv
 
 TEST_SIZE = 0.3
