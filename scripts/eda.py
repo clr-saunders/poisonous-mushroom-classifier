@@ -118,27 +118,13 @@ def eda_after_split(train_df: pd.DataFrame) -> None:
         f"is close to expected ({EXPECTED_POISONOUS:.3f})."
     )
 
+
 def save_updated_train_test(train_df: pd.DataFrame, test_df: pd.DataFrame) -> None:
     """Overwrite mushroom_train/test with any updated columns (e.g., veil_type dropped)."""
     train_df.to_csv(PROCESSED_DIR / "mushroom_train.csv", index=False)
     test_df.to_csv(PROCESSED_DIR / "mushroom_test.csv", index=False)
     print("\nUpdated mushroom_train.csv and mushroom_test.csv in data/processed/.")
-
-
-# def get_poison_rate_by(train_df: pd.DataFrame, feature: str) -> pd.DataFrame:
-#     """
-#     Compute the proportion of poisonous and edible mushrooms for each category
-#     of a given feature, based on the training set.
-#     """
-#     category_poisonous = pd.crosstab(
-#         train_df[feature],
-#         train_df["is_poisonous"],
-#         normalize="index",
-#     )
-#     # 0 = edible, 1 = poisonous
-#     category_poisonous.columns = ["edible_frac", "poisonous_frac"]
-#     return category_poisonous.sort_values("poisonous_frac", ascending=False)
-
+    
 
 def stacked_poison_chart(
     train_df: pd.DataFrame,
@@ -259,39 +245,6 @@ def save_stacked_charts(train_df: pd.DataFrame) -> None:
         chart.save(out_path)  # extension `.png` tells Altair to export PNG
         print(f"Saved stacked chart for '{feature}' to {out_path}")
 
-# def compute_and_save_poison_variance_rank(train_df: pd.DataFrame) -> pd.DataFrame:
-#     """
-#     Rank features by how strongly they separate poisonous vs edible mushrooms.
-
-#     Uses the variance of the 'poisonous_frac' across categories of each feature
-#     as an association measure.
-#     """
-#     feature_cols = [c for c in train_df.columns if c != "is_poisonous"]
-
-#     feature_scores: list[dict] = []
-
-#     for col in feature_cols:
-#         ct = get_poison_rate_by(train_df, col)
-#         score = ct["poisonous_frac"].var()
-#         feature_scores.append(
-#             {
-#                 "feature": col,
-#                 "poison_variance": round(float(score), 2),
-#             }
-#         )
-
-#     feature_importance_eda = (
-#         pd.DataFrame(feature_scores)
-#         .sort_values("poison_variance", ascending=False)
-#         .reset_index(drop=True)
-#     )
-#     feature_importance_eda.index = feature_importance_eda.index + 1
-
-#     out_path = TABLES_DIR / "feature_poison_variance_rank.csv"
-#     feature_importance_eda.to_csv(out_path, index=True)
-#     print(f"Saved poison-variance feature ranking to {out_path}")
-
-#     return feature_importance_eda
 
 def compute_and_save_poison_variance_rank(
     train_df: pd.DataFrame,
@@ -334,66 +287,6 @@ def compute_and_save_poison_variance_rank(
 
     return feature_importance_eda
 
-
-
-# def cramers_v(df: pd.DataFrame, feature1: str, feature2: str) -> float:
-#     """Compute Cramér's V between two categorical features."""
-#     table = pd.crosstab(df[feature1], df[feature2])
-#     chi2, _, _, _ = chi2_contingency(table)
-#     n = table.sum().sum()
-#     phi2 = chi2 / n
-#     r, k = table.shape
-#     return float(np.sqrt(phi2 / min(k - 1, r - 1)))
-
-
-# def compute_and_save_cramers_matrix(train_df: pd.DataFrame) -> None:
-#     """
-#     Compute Cramér's V matrix for all pairwise feature/target combinations
-#     and save both the matrix and a PNG heatmap.
-#     """
-#     cols = list(train_df.columns)
-#     feature_cols = cols  # includes target; that's fine for inspection
-#     pairs = list(itertools.combinations(feature_cols, 2))
-
-#     cramers_matrix = pd.DataFrame(
-#         np.eye(len(feature_cols)),
-#         columns=feature_cols,
-#         index=feature_cols,
-#     )
-
-#     for f1, f2 in pairs:
-#         v = cramers_v(train_df, f1, f2)
-#         cramers_matrix.loc[f1, f2] = v
-#         cramers_matrix.loc[f2, f1] = v
-
-#     # Save raw matrix (table)
-#     matrix_path = TABLES_DIR / "cramers_v_matrix.csv"
-#     cramers_matrix.to_csv(matrix_path)
-#     print(f"\nSaved Cramér's V matrix to {matrix_path}")
-
-#     # Heatmap PNG
-#     cramers_long = cramers_matrix.reset_index().melt(id_vars="index")
-#     cramers_long.columns = ["feature_1", "feature_2", "cramers_v"]
-
-#     heatmap = (
-#         alt.Chart(cramers_long)
-#         .mark_rect()
-#         .encode(
-#             x=alt.X("feature_1:N", sort=feature_cols, title="Feature 1"),
-#             y=alt.Y("feature_2:N", sort=feature_cols, title="Feature 2"),
-#             color=alt.Color(
-#                 "cramers_v:Q",
-#                 scale=alt.Scale(domain=[0, 1], scheme="purpleorange"),
-#                 title="Cramér's V",
-#             ),
-#         )
-#         .properties(width=300, height=300)
-#     )
-
-#     heatmap_path = FIGURES_DIR / "cramers_v_heatmap.png"
-#     heatmap.save(heatmap_path)
-#     print(f"Saved Cramér's V heatmap to {heatmap_path}")
-    
 
 def compute_and_save_cramers_matrix(train_df: pd.DataFrame) -> None:
     """
@@ -442,7 +335,6 @@ def compute_and_save_cramers_matrix(train_df: pd.DataFrame) -> None:
 # -------------------------------------------------------------------
 # Main pipeline
 # -------------------------------------------------------------------
-
 
 def main():
     # Load pre-split train and test data
