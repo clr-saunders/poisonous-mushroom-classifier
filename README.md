@@ -51,7 +51,15 @@ This will generate the final report at `docs/index.html`.
 
 ### Clean up
 
-1. To shut down the container and clean up the resources, type `Ctrl + D` in the terminal where you launched the container
+1. To exit the container shell, type `Ctrl + D` or `exit` in the terminal where you launched the container
+
+### Stopping and removing the Docker container
+
+- To explicitly stop and remove the container and associated resources, run:
+
+```bash
+docker compose down
+```
 
 ## Developer notes
 
