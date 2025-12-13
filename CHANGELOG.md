@@ -117,7 +117,7 @@ Feedback addressed:
 **I1. Expanded and standardized docstrings across scripts for clarity and reviewability**
 
 **Feedback addressed:**
->"The docstrings in some of the script files could be more thorough to aid the project review or future user. For example, in the download_data.py script the docstring for the main function is only a one line general description… In Milestone 4 when we add function tests you could also add a ‘Raises’ section…"
+>"The docstrings in some of the script files could be more thorough to aid the project review or future user. For example, in the download_data.py script the docstring for the main function is only a one line general description… In Milestone 4 when we add function tests you could also add a 'Raises' section…"
 
 **What was changed:**
 - Expanded docstrings across multiple scripts to include:
