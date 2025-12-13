@@ -13,7 +13,6 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.make_pipeline import create_model_pipeline
 from matplotlib import pyplot as plt
-import pickle
 
 @click.command()
 @click.argument('train_df')
@@ -31,11 +30,6 @@ def main(train_df, test_df):
 
     preprocessor = OneHotEncoder(handle_unknown="ignore")
 
-    # dc_pipe = make_pipeline(
-    #     preprocessor, 
-    #     DummyClassifier(random_state=123)
-    # )
-
     dc_pipe = create_model_pipeline(
         DummyClassifier(random_state=123),
         preprocessor
@@ -45,8 +39,6 @@ def main(train_df, test_df):
 
     dc_pipe.fit(x_train, y_train)
 
-    with open('scripts/models/dummy.pkl', 'wb')  as f:
-        pickle.dump(dc_pipe, f)
 
     cross_val_dc = pd.DataFrame(
         cross_validate(
@@ -60,8 +52,6 @@ def main(train_df, test_df):
 
     svc_pipe.fit(x_train, y_train)
 
-    with open('scripts/models/svc.pkl', 'wb')  as f:
-        pickle.dump(svc_pipe, f)
 
     cross_val_svc = pd.DataFrame(
         cross_validate(

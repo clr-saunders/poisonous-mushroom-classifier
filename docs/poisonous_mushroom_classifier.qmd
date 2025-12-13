@@ -231,23 +231,7 @@ Correlation heatmap (Cramer's V) for all feature and feature-target pairs in the
 
 Before we continue, we must preprocess our data such that the features work with our models. Since all of our features are strings, we can opt to use one-hot encoding for them all. We fit a `DummyClassifier` to our data as a baseline to compare our actual model with. Random state used again for reproducibility.
 
-```{python}
-set_config(display='diagram')
-
-dc_pipe
-
-```
-SciKit Learn pipe for the Dummy Classifier model
-
-
 In our classification problem, we opt to use `SVC` [@svc] as our model of choice for its effective usage in this scenario. We do not have an extreme amount of data (< 10000 observations) on top of only being a binary classification task. 
-
-```{python}
-
-svc_pipe
-
-```
-SciKit Learn pipe for the SVC model
 
 ![](../img/confusion_matrix.png){#fig-confusion-matrix-svc}
 
