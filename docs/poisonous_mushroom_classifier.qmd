@@ -1,7 +1,7 @@
 ---
 title: "Poisonous Mushroom Classification"
 author: "Amar Gill, Ruth Yankson, Limor Winter, Claire Saunders"
-date: "December 6, 2025"
+date: "December 13, 2025"
 jupyter: python3
 format: 
     html:
