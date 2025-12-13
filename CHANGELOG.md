@@ -10,11 +10,11 @@ The format follows guidance from [Keep a Changelog](https://keepachangelog.com/)
 
 ### Fixed
 
-**1. In commit [#7730c3d](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/7730c3dffd52f121b6bd134f046a32082846f5ce), addressed the following [feedback](https://github.com/UBC-MDS/data-analysis-review-2025/issues/14#issuecomment-3648581399):
+**F1. In commit** [#7730c3d](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/7730c3dffd52f121b6bd134f046a32082846f5ce), addressed the following [feedback](https://github.com/UBC-MDS/data-analysis-review-2025/issues/14#issuecomment-3648581399):
 
 "The model pipeline does not display well on the HTML report; therefore, it might be better to describe it using words or simply remove it since it is less relevant to the general audience."
 
-**2. Removed ambiguous index column ("Unnamed: 0") from generated tables**
+**F2. Removed ambiguous index column ("Unnamed: 0") from generated tables**
 
 **Feedback addressed:**
 
@@ -31,7 +31,7 @@ The format follows guidance from [Keep a Changelog](https://keepachangelog.com/)
 - Updated compute_poison_variance_rank() output to avoid unnamed index columns.
 - Verified rendered tables in docs/poisonous_mushroom_classifier.qmd no longer display Unnamed: 0.
 
-**3. Removed large blocks of commented-out code from EDA scripts**
+**F3. Removed large blocks of commented-out code from EDA scripts**
 
 Feedback addressed:
 >"I noticed in your scripts on a few occasions large blocks of code were commented out (for example in eda.py)."
@@ -44,7 +44,21 @@ Feedback addressed:
 - Cleaned `scripts/eda.py` to contain only executable pipeline logic.
 - Moved reusable EDA logic into `src/mushroom_eda_utils.py`.
 
-**4. Added attribution and corrected link in Code of Conduct**
+**F4. Updated Cramér's V heatmap to use a color-blind friendly palette**
+
+**Feedback addressed:**
+>"Use color blind friendly palettes for charts (currently the purple/orange may be problematic)."
+
+**What was changed:**
+- Replaced the purple/orange color scheme used in the Cramér's V heatmap with a perceptually-uniform, color-blind friendly palette (viridis).
+- Kept the underlying Cramér's V computation unchanged; this is strictly a visualization/accessibility improvement.
+- Confirmed the heatmap still exports correctly as a PNG to results/figures/.
+
+**Evidence:** Commit [#bb5ac3](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/75/commits/bb5ac3c32992d214518cc799713cd8b4529d7693)
+- Updated `compute_and_save_cramers_matrix()` in `scripts/eda.py` to use `viridis` instead of the previous `purpleorange` scheme.
+- Verified output file `results/figures/cramers_v_heatmap.png` renders with the updated palette in the Quarto report (`docs/poisonous_mushroom_classifier.qmd`).
+
+**F5. Added attribution and corrected link in Code of Conduct**
 
 **Feedback adreesed:**
 >"Include attribution for the Code of Conduct and ensure that the source link is working.”
@@ -58,7 +72,7 @@ Feedback addressed:
 **Evidence:** Commits [#8b2482f](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/8b2482fd93c819fd612fe70a61a02b0acc67a950) and [#ba63d79](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/ba63d79d0e5eeaed9a5a8eddc6f40a1c953c11d7).
 - File: `CODE_OF_CONDUCT.md`
 
-**5. Corrected minor typos and improved phrasing in project report**
+**F6. Corrected minor typos and improved phrasing in project report**
 
 **Feedback addressed:**
 
@@ -77,7 +91,7 @@ Feedback addressed:
 
 ### Added
 
-**4. Automated tests for EDA utility functions**
+**A1. Automated tests for EDA utility functions**
 
 **Feedback addressed:**
 >"Tests: Are there automated tests or manual steps described so that the function of the software can be verified?
@@ -89,7 +103,7 @@ Feedback addressed:
     - Feature summarization
     - Poison-rate computation
     - Cramér’s V calculation
-    -Feature ranking by poison variance
+    - Feature ranking by poison variance
 
 **Evidence:** Commits [#90353c2](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/90353c251bf2e9c9ab96bc1a8f44d7687ced61d3), [#3380d74](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/3380d74747675a9c42bcc67dc19fda23a281fb9c) and [#fa93274](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/fa93274b8f07456ce835d1e01d5c1f65b02eeac2)
 - New test file: `tests/test_mushroom_eda_utils.py`
@@ -100,7 +114,7 @@ Feedback addressed:
 
 ### Improved
 
-**5. Expanded and standardized docstrings across scripts for clarity and reviewability**
+**I1. Expanded and standardized docstrings across scripts for clarity and reviewability**
 
 **Feedback addressed:**
 >"The docstrings in some of the script files could be more thorough to aid the project review or future user. For example, in the download_data.py script the docstring for the main function is only a one line general description… In Milestone 4 when we add function tests you could also add a ‘Raises’ section…"
@@ -122,7 +136,7 @@ Expanded docstrings in:
 - Tests in tests/test_mushroom_eda_utils.py align with documented error handling behavior.
 
 
-**6. Expanded docstring and removed obsolete commented-out code in `download_data.py`**
+**I2. Expanded docstring and removed obsolete commented-out code in `download_data.py`**
 
 **Feedback addressed:**
 
