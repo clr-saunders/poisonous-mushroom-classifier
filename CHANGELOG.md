@@ -10,7 +10,7 @@ The format follows guidance from [Keep a Changelog](https://keepachangelog.com/)
 
 ### Fixed
 
-1. In commit [#7730c3d](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/7730c3dffd52f121b6bd134f046a32082846f5ce), addressed the following [feedback](https://github.com/UBC-MDS/data-analysis-review-2025/issues/14#issuecomment-3648581399):
+**1. In commit [#7730c3d](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/7730c3dffd52f121b6bd134f046a32082846f5ce), addressed the following [feedback](https://github.com/UBC-MDS/data-analysis-review-2025/issues/14#issuecomment-3648581399):
 
 "The model pipeline does not display well on the HTML report; therefore, it might be better to describe it using words or simply remove it since it is less relevant to the general audience."
 
@@ -57,6 +57,22 @@ Feedback addressed:
 
 **Evidence:** Commits [#8b2482f](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/8b2482fd93c819fd612fe70a61a02b0acc67a950) and [#ba63d79](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/ba63d79d0e5eeaed9a5a8eddc6f40a1c953c11d7).
 - File: `CODE_OF_CONDUCT.md`
+
+**5. Corrected minor typos and improved phrasing in project report**
+
+**Feedback addressed:**
+
+> "Some sections of the report contain small grammatical errors or awkward phrasing that affect readability."
+
+**What was changed:**
+
+- Reviewed and edited `docs/poisonous_mushroom_classifier.qmd` for grammatical consistency and clarity.  
+- Revised the "Data Splitting" paragraph in `docs/poisonous_mushroom_classifier.qmd` for smoother, more formal phrasing.
+- Improved the sentence about setting `random_state=123` to ensure reproducibility.
+- Corrected minor typographical errors, punctuation inconsistencies, and formatting issues.  
+
+**Evidence:** Commit [#5876bfc](https://github.com/clr-saunders/poisonous-mushroom-classifier/commit/5876bfc62d70f7696576acdcca25bb579cbfaef9)  
+- File: `docs/poisonous_mushroom_classifier.qmd`
 ---
 
 ### Added
