@@ -3,9 +3,10 @@
 # date: 2025-12-02
 
 import click
-import requests
-import zipfile
 import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.read_zip import read
 
 @click.command()
 @click.option('--url', type=str, help="URL of dataset to be downloaded")
@@ -13,16 +14,8 @@ import os
 
 def main(url, data_path):
     """Download and extract the UCI Mushroom dataset, then check its format."""
-    response = requests.get(url)
+    read(url, data_path)
 
-    os.makedirs(data_path, exist_ok=True)
-
-    zip_path = os.path.join(data_path, "mushroom.zip")
-
-    with open(zip_path, 'wb') as f:
-        f.write(response.content)
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(data_path)
 
         
     correct_exts = {".csv",".data"}
