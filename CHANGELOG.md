@@ -44,6 +44,22 @@ Feedback addressed:
 - Cleaned `scripts/eda.py` to contain only executable pipeline logic.
 - Moved reusable EDA logic into `src/mushroom_eda_utils.py`.
 
+**6. Updated Cramér's V heatmap to use a color-blind friendly palette**
+
+**Feedback addressed:**
+>"Use color blind friendly palettes for charts (currently the purple/orange may be problematic)."
+
+**What was changed:**
+- Replaced the purple/orange color scheme used in the Cramér's V heatmap with a perceptually-uniform, color-blind friendly palette (viridis).
+- Kept the underlying Cramér's V computation unchanged; this is strictly a visualization/accessibility improvement.
+- Confirmed the heatmap still exports correctly as a PNG to results/figures/.
+
+**Evidence:** Commit [#bb5ac3](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/75/commits/bb5ac3c32992d214518cc799713cd8b4529d7693)
+- Updated compute_and_save_cramers_matrix() in scripts/eda.py (or src/<file>.py) to use viridis instead of the previous purple/orange scheme.
+- Verified output file results/figures/cramers_v_heatmap.png renders with the updated palette in the Quarto report (docs/poisonous_mushroom_classifier.qmd).
+
+
+
 ---
 
 ### Added
@@ -60,7 +76,7 @@ Feedback addressed:
     - Feature summarization
     - Poison-rate computation
     - Cramér’s V calculation
-    -Feature ranking by poison variance
+    - Feature ranking by poison variance
 
 **Evidence:** Commits [#90353c2](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/90353c251bf2e9c9ab96bc1a8f44d7687ced61d3), [#3380d74](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/3380d74747675a9c42bcc67dc19fda23a281fb9c) and [#fa93274](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/68/commits/fa93274b8f07456ce835d1e01d5c1f65b02eeac2)
 - New test file: `tests/test_mushroom_eda_utils.py`
