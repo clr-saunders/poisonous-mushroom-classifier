@@ -71,6 +71,30 @@ To add a new Python or system dependency:
 5. Update the `docker-compose.yml` file on your branch to use the new container image (make sure to update the tag specifically).
 6. Send a pull request to merge the changes into the `main` branch.
 
+## Testing
+
+This project uses pytest for unit testing. Tests cover core data preprocessing, exploratory data analysis (EDA) utilities, and model-related logic.
+
+All test commands below assume you are running inside the project environment (e.g., the Docker container or a local conda environment with dependencies installed).
+
+### Run all tests
+
+To run the full test suite:
+
+```bash
+
+python -m pytest -q
+
+```
+
+### Run specific test file
+To run a specific test file, provide the path to the file:
+- For EDA utilities tests:
+
+```bash
+python -m pytest tests/test_mushroom_eda_utils.py -q
+```
+
 ## License
 
 The Poisonous Mushroom Classifier report and documentation contained herein are licensed under the **Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** License.

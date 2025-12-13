@@ -1,10 +1,10 @@
 # As per Skye's direction that we are free to use AI for this task, these tests were written by ChatGPT with some small changes made to naming and some minor adjustments to code made in careful review by Claire Saunders.
 # The prompt used was: Write simple and robust tests for the function documented below (I pasted the write_csv function documentation. Use the pytest Python package framework and follow the black style guide for Python. Please ensure you use simple code that is clear and reproducible. Note, these tests will be saved in a tests directory, and will call the function write_csv from the src directory to run the tests. 
 
-import os
 import pandas as pd
 import pytest
 import sys
+import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.write_csv import write_csv
 
