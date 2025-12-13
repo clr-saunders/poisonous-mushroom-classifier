@@ -155,6 +155,6 @@ Expanded docstrings in:
 
 - Expanded on the discussion to include more details regarding future work and adjusted passive language to be more active and thus draw more attention the future work discussion.
 
-**Evidence** Commit 
+**Evidence** Commit [8b33915](https://github.com/clr-saunders/poisonous-mushroom-classifier/pull/77/commits/8b33915e28b72d26cef6bad5854ad9a4f4939a26)
 
 - File: `poisonous_mushrooms_classifier.qmd`
