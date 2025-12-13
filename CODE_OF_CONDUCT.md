@@ -35,3 +35,9 @@ Instances of unacceptable behaviour may be reported by contacting the project te
 - A confidential and thorough investigation will be conducted.
 - All affected parties will be able to argue for and defend themselves.
 - A final decision will be made based on a majority team vote.
+
+## Attribution
+
+This Code of Conduct is adapted from the [Contributor Covenant 3.0 Code of Conduct](https://www.contributor-covenant.org/version/3/0/code_of_conduct/),  
+version 3.0, available at https://www.contributor-covenant.org/version/3/0/code_of_conduct/. 
+

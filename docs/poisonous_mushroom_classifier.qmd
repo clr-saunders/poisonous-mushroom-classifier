@@ -83,7 +83,7 @@ The family includes the common cultivated mushroom (*Agaricus bisporus*), and so
 These mushrooms are sometimes found in forests, but many grow on lawns, in the compost, or along roadsides and grassy areas where they are readily accessible for human consumption [@lincoff1981]. 
 Accurate assessment of the edibility of these mushrooms is extremely important prior to consumption, however there is no simple rule for determining whether any example is poisonous or edible [@lincoff1981]. 
 
-Here we ask if we can use a supervised machine learning algorithm to predict whether a given mushroom from the Agaricus and Lepiota family of mushrooms is edible or poisonous, based upon it's physical characteristics. 
+Here we ask if we can use a supervised machine learning algorithm to predict whether a given mushroom from the Agaricus and Lepiota family of mushrooms is edible or poisonous, based upon its physical characteristics. 
 Answering this question is important because mushroom poisonings are common and the greatest risk factor for mushroom poisoning is the misidentification of poisonous species as edible, in particular by amateur mushroom foragers and immigrants [@diaz2016].
 If made accessible to the public in North America, accurate prediction of mushrooms in this family could prevent poisoning and support the safe consumption of common edible mushrooms. 
 
@@ -92,7 +92,7 @@ If made accessible to the public in North America, accurate prediction of mushro
 ## Data
 
 The data set used in this project includes hypothetical mushroom samples drawn from The Audubon Society Field Guide to North American Mushrooms by Gary Lincoff [@lincoff1981]. 
-It was sourced from the UCI Machine Learning Repository [@uci_mushroom], specifically the file *agarius-lepiota.data*. 
+It was sourced from the UCI Machine Learning Repository [@uci_mushroom], specifically the file *agaricus-lepiota.data*. 
 It includes `{python} nrows_raw`  descriptions of hypothetical mushroom samples that correspond to 23 species of mushrooms in the Agaricus and Lepiota Family [@lincoff1981]. 
 Each row includes `{python} len(dataset_col_names) - 1` categorical variables that are physical characteristics of the mushroom sample, including the odor, gill-spacing, gill-color, gill-size, population, habitat, etc, and is labelled as edible or poisonous. 
 
@@ -127,9 +127,8 @@ Since all observed category values matched their expected sets, we conclude that
 
 # Data Splitting 
 
-We are trying to classify whether a mushroom is edible (0) or poisonous (1). Going to do a 70/30 train/test split due to the large and roughly equal proportions of edible and poisonous mushrooms. 
-
-A random state of `123` will ensure reproducibility when ran by subsequent users.
+We aim to classify mushrooms as edible (0) or poisonous (1). Because the dataset contains roughly equal proportions of edible and poisonous samples, we apply a 70/30 train–test split to ensure sufficient data for both model training and evaluation.
+To maintain consistency and reproducibility across runs, a random state of 123 is set when performing the split, allowing subsequent users to obtain identical training and test sets.
 
 
 # EDA After Data Splitting 
@@ -218,7 +217,7 @@ Correlation heatmap (Cramer's V) for all feature and feature-target pairs in the
 :::
 
 ## Summary of Anomalous Correlation Between Features:
-@fig-corr-heatmap shows a high correlation between the feature `gill_attachment` and the three features `stalk_color_above_ring`, `stalk_color_below_ring`, and `veil_color`. We expect this is a feature of the dataset because it includes a high number of observations (`{python} nrows_train_df` in our training data) and only 23 species, so there are many repeated instances of each species. If a particular species has fixed color and gill attachment characteristics than it is expected that we would find a high correlation between these features. It is not likely to be a sign of data leakage, but does suggest that there are weaknesses in the biological representativeness of the dataset. Therefore, the dataset may not be the strongest choice for generalizing predictions about the poisonousness of mushrooms across the full Agaricus and Lepiota (Agaricaceae) family, since it may not capture the true diversity and independence of these features found in nature.
+@fig-corr-heatmap shows a high correlation between the feature `gill_attachment` and the three features `stalk_color_above_ring`, `stalk_color_below_ring`, and `veil_color`. We expect this is a feature of the dataset because it includes a high number of observations (`{python} nrows_train_df` in our training data) and only 23 species, so there are many repeated instances of each species. If a particular species has fixed color and gill attachment characteristics then it is expected that we would find a high correlation between these features. It is not likely to be a sign of data leakage, but does suggest that there are weaknesses in the biological representativeness of the dataset. Therefore, the dataset may not be the strongest choice for generalizing predictions about the poisonousness of mushrooms across the full Agaricus and Lepiota (Agaricaceae) family, since it may not capture the true diversity and independence of these features found in nature.
 
 ## Summary of Anomalous Correlation Between Feature "Odor" and Target: 
 @fig-corr-heatmap shows a high correlation between the feature `odor` and the target, and a moderately high correlation between `spore_print_color` and the target. However, the dataset we are using includes background information on the logical rules discovered by prior researchers Duch, Adamczak, and Grabczewski [@datastudy], and they found that "odor" is often the first split for identifying poisonous mushrooms, and "spore_print_color" is often the second. Hence both of these features are expected to be strong predictors of the target and the seeming anomalous correlation is simply an accurate reflection of biological reality as captured by the dataset, and not likely to be a sign of data leakage in this case. 
@@ -240,9 +239,9 @@ Our prediction model performed excellently on test data, classifying all of the 
 
 This performance is identical to the results published on the [UCI website](https://archive.ics.uci.edu/dataset/73/mushroom) from which the data was sourced [@datasource]. 
 As shown in the confusion matrix, the model has a recall of `{python} recall` and precision of `{python} precision`, due to no false positives or negatives. 
-The model also shows robustness, with no difference in the accuracy of training and test scores, so it is promising that this model could be deployed effectively to protect mushroom consumers from eating poisonous mushrooms.That said, there are some practical concerns for public implementation, namely the model is fit on `{python} nfeats` different features that correspond to specific categorical physical characteristics of a mushroom, and thus accuracy requires accurate identification of physical characteristics.
+The model also shows robustness, with no difference in the accuracy of training and test scores, so it is promising that this model could be deployed effectively to protect mushroom consumers from eating poisonous mushrooms. That said, there are some practical concerns for public implementation, namely the model is fit on `{python} nfeats` different features that correspond to specific categorical physical characteristics of a mushroom, and thus accuracy requires accurate identification of physical characteristics.
 
-Hence, if an amateur mushroom enthusiast aimed to utilize the model to predict edibility but misidentified the physical characeristics of the mushroom they were attempting to classify, then the accuracy of the models predictions would be effectively moot as it would not be returning a prediction for the true foraged mushroom.
+Hence, if an amateur mushroom enthusiast aimed to utilize the model to predict edibility but misidentified the physical characteristics of the mushroom they were attempting to classify, then the accuracy of the models predictions would be effectively moot as it would not be returning a prediction for the true foraged mushroom.
 One might consider creating a similar predictor with a smaller number of features to increase the practical efficacy of the model, though they would need to consider balancing the models accuracy with efficacy, because the risk of falsely predicting a mushroom as edible could be fatal. 
 It is also worth noting that the hypothetical mushroom observations in this model are based upon a book from 1981 [@lincoff1981], so it would be wise to consider whether the data could be updated to be sourced from a more recent source of mushroom science. 
 
